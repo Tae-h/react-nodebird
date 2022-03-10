@@ -1,23 +1,37 @@
 import {Button, Form, Input} from 'antd';
-import {useCallback, useState} from "react";
+import {useCallback, useMemo, useState} from "react";
 import Link  from 'next/link';
+import styled from 'styled-components';
+import PropTypes from "prop-types";
+import useinput from "../hooks/useInput";
+import useInput from "../hooks/useInput";
 
-const LoginForm = () => {
+const ButtonWrapper = styled.div`
+  margin-top: 10px;
+`
+const FormWrapper = styled(Form)`
+      padding: 10px;
+    `;
+const LoginForm = ({ setIsLoggedIn }) => {
 
-    const [id, setId] = useState('');
-    const [password, setPassword] = useState('');
+    const [id, onChangeId] = useInput('');
+    const [password, onChangePassword] = useInput('');
 
-    const onChangeId = useCallback((e) => {
-        setId(e.target.value);
-    }, [id]);
 
-    const onChangePassword = useCallback((e) => {
-        setPassword(e.target.value);
-    }, [password]);
+    /* useMemo 값을 캐싱 하기 때문에 이렇게도 많이 사용! */
+    //const styled = useMemo(() => ({marginTop: 10}), []);
+
+    const onSubmitForm = useCallback(() => {
+        console.log(id, password);
+        setIsLoggedIn(true);
+    }, [id, password]);
+
+
+
 
     return (
         <>
-            <Form>
+            <FormWrapper onFinish={ onSubmitForm }> {/* onFinish 는 e.preventDefault 가 적용 되어있음! */}
                 <div>
                     <label htmlFor="user-id">아이디</label>
                     <br/>
@@ -33,22 +47,24 @@ const LoginForm = () => {
                         onChange={ onChangePassword }
                         required />
                 </div>
-                <div>
+                <ButtonWrapper>
                     <Button
                         type="primary"
-                        htmpType="submit"
+                        htmlType="submit"
                         loading={false}
                     >
                         로그인
                     </Button>
                     <Link href="/signup"><a><Button>회원가입</Button></a></Link>
-                </div>
-                <div>
+                </ButtonWrapper>
 
-                </div>
-            </Form>
+            </FormWrapper>
         </>
     )
+}
+
+LoginForm.propTypes = {
+    setIsLoggedIn: PropTypes.func.isRequired,
 }
 
 export default LoginForm;
