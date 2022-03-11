@@ -5,6 +5,7 @@ import {memo, useState} from "react";
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import styled from "styled-components";
+import {useSelector} from "react-redux"; // 리액트랑 리덕스랑 연결
 
 /* styled-components 로 빼면 리렌더링이 되지 않음 */
 const SearchInput = styled(Input.Search)`
@@ -13,7 +14,9 @@ const SearchInput = styled(Input.Search)`
 
 const AppLayout = memo(( { children } ) => {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    //const [isLoggedIn, setIsLoggedIn] = useState(false); //<-- 이제 리덕스 중앙
+    //const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+    const { isLoggedIn } = useSelector((state) => state.user); // 취향 차이
 
     return (
         <div>
@@ -33,7 +36,7 @@ const AppLayout = memo(( { children } ) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6} >
-                    { isLoggedIn ? <UserProfile setIsLoggedIn={ setIsLoggedIn } /> : <LoginForm setIsLoggedIn={ setIsLoggedIn }/> }
+                    { isLoggedIn ? <UserProfile /> : <LoginForm /> }
                 </Col>
                 <Col xs={24} md={12} >
                     { children }
