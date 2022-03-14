@@ -3,11 +3,12 @@ export const initialState = {
         {
             id: 1,
             User: {id: 1, nickname: '테스터1'},
-            content: '테스트 글입니당!1 ',
+            content: '테스트 #해시태그 #해시태그2 ',
             Images: [
                 {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
                 {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003311/rn_view_BN003311.jpg'},
+                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
             ],
             Comments: [
                 {User: {nickname: '댓글러1-1'}, content: '코멘트 1-1'},
@@ -35,7 +36,6 @@ export const initialState = {
             Images: [
                 {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
                 {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003311/rn_view_BN003311.jpg'},
             ],
             Comments: [
                 {User: {nickname: '댓글러3-1'}, content: '코멘트 3-1'},
@@ -48,8 +48,6 @@ export const initialState = {
             content: '테스트 글입니당!4',
             Images: [
                 {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003311/rn_view_BN003311.jpg'},
             ],
             Comments: [
                 {User: {nickname: '댓글러4-1'}, content: '코멘트 4-1'},

@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import {useCallback, useState} from "react";
 import CommentForm from "./CommentForm";
+import PostCardContent from "./PostCardContent";
 
 
 const PostCard = ({ post }) => {
@@ -38,14 +39,14 @@ const PostCard = ({ post }) => {
                                 : <HeartOutlined key={"heart"} onClick={onToggleLike}/>
                         ,
                         <MessageOutlined key={"comment"} onClick={onToggleComment}/>,
-                        <Popover key={"more"} content={[
+                        <Popover key="more" content={[
                             <Button.Group>
                                 {(id && post.User.id === id) ? (
                                     <>
-                                        <Button>수정</Button>
-                                        <Button type="danger">삭제</Button>
+                                        <Button key={"modify_" + post.id}>수정</Button>
+                                        <Button key={"delete_" + post.id} type="danger">삭제</Button>
                                     </>)
-                                 : <Button>신고</Button>
+                                 : <Button key={"report_" + post.id}>신고</Button>
                                 }
                             </Button.Group>
                         ]}>
@@ -56,7 +57,7 @@ const PostCard = ({ post }) => {
                     <Card.Meta
                         avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                         title={post.User.nickname}
-                        description={post.content}
+                        description={ <PostCardContent postData={post.content} />}
                     />
 
                 </Card>

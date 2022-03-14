@@ -11,7 +11,7 @@ const CommentForm = ({post}) => {
     const [commentText, onChangeCommentText] = useInput('');
 
     const onSubmitComment = useCallback(() => {
-        console.log('부모글 번호: ',post.id, commentText)
+        console.log('부모글 아이디: ', post.id, commentText)
     }, [commentText]);
 
     return (
@@ -34,7 +34,7 @@ const CommentForm = ({post}) => {
 }
 
 CommentForm.propTypes = {
-    CommentForm: PropTypes.object.isRequired,
+    post: PropTypes.object.isRequired,
 }
 
 export default CommentForm;
