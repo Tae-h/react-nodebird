@@ -6,6 +6,20 @@ export const initialState = {
     loginData: {}
 };
 
+/* thunk 이렇게 쓰는게 끝임 */
+/*export const loginAction = (data) => {
+    return (dispatch, getState) => {
+        dispatch(loginSuccessAction());
+        axios.post('/api/login')
+            .then((res) => {
+            dispatch(loginSuccessAction(res.data));
+        })
+            .catch((err) => {
+                dispatch(loginFailureAction(err));
+        })
+    }
+}*/
+
 export const loginAction  = (data) => {
     return {
         type: 'LOG_IN',
