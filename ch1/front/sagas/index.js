@@ -1,8 +1,16 @@
-import {func} from "prop-types";
+import {all, fork, call, put, take} from 'redux-saga/effects';
+import axios from 'axios';
+import postSaga from "./post";
+import userSaga from "./user";
+
 
 
 export default function* rootSaga() { // gen 함수 rootSaga.next() 를 해야 실행
-
+    yield all([ // all: 배열 내에 있는 것을 모두 실행시킨다.
+        // fork : 함수를 실행 시키는 함수, 비동기, call: fork 와 하는역할은 같으나 동기
+        fork(userSaga),
+        fork(postSaga),
+    ])
 }
 
 
@@ -36,3 +44,6 @@ const gen2 = function* () {
 const g = gen2();
 g.next();
 */
+
+
+
