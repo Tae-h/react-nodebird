@@ -1,19 +1,20 @@
 
 export const initialState = {
-    me: null,
+    me: null, // 요거 데이터 형식이 뭐지....
     signUpData: {},
     loginData: {},
-    isLoggingIn: false, // 로그인 시도중
-    isLoggedIn: false,
-    isLoggedInFailure: null,
 
-    isLoggingOut: false, // 로그아웃 시도중
-    isLoggedOut: false,
-    isLoggedOutFailure: null,
+    loginLoading: false, // 로그인 시도중
+    loginDone: false,
+    loginError: null,
+
+    logoutLoading: false,
+    logoutDone: false,
+    logoutError: false,
 
     signUpLoading: false, // 가입 시도중
     signUpDone: false,
-    signUpFailure: null,
+    signUpError: null,
 
 };
 
@@ -81,47 +82,48 @@ const reducer = (state = initialState, action) => {
         case LOG_IN_REQUEST: {
             return {
                 ...state,
-                isLoggingIn: true, // 로그인 중
-                isLoggedInFailure: null,
-                isLoggedIn: false,
+                loginLoading: true, // 로그인 중
+                loginError: null,
+                loginDone: false,
             };
         }
         case LOG_IN_SUCCESS: {
             return {
                 ...state,
-                isLoggingIn: false,
-                isLoggedIn: true,
+                loginLoading: false,
+                loginDone: true,
                 me: dummyUser(...action.data),
             };
         }
         case LOG_IN_FAILURE: { // 로그인 실패 시
             return {
                 ...state,
-                isLoggedIn: false,
-                isLoggingIn: false,
-                isLoggedInFailure: action.error,
+                loginDone: false,
+                loginLoading: false,
+                loginError: action.error,
             };
         }
+
         case LOG_OUT_REQUEST: {
             return {
                 ...state,
-                isLoggingOut: true,
-                isLoggedOut: false,
+                logoutLoading: true,
+                logoutDone: false,
             }
         }
         case LOG_OUT_SUCCESS: {
             return {
                 ...state,
-                isLoggedOut: true,
-                isLoggingOut: false,
+                logoutDone: true,
+                logoutLoading: false,
                 me: null,
             }
         }
         case LOG_OUT_FAILURE: {
             return {
                 ...state,
-                isLoggingOut: false,
-                isLoggedInFailure: action.error,
+                logoutLoading: false,
+                logoutError: action.error,
             }
         }
 
@@ -144,7 +146,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 signUpLoading: false,
-                signUpFailure: action.error,
+                signUpError: action.error,
             }
         }
         default:

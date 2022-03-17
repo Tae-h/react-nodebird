@@ -12,6 +12,6 @@ export default (initialValue = null) => {
         setValue(e.target.value);
     }, [value]);
 
-    return [value, handler];
+    return [value, handler, setValue];
 
 }

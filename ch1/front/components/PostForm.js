@@ -1,20 +1,26 @@
 import {Button, Form, Input} from "antd";
-import {useCallback, useRef, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { addPostAction} from "../reducers/post";
 
 const PostForm = () => {
 
-    const { imagePaths } = useSelector((state) => state.post);
-
     const dispatch = useDispatch();
+    const { imagePaths, addPostDone } = useSelector((state) => state.post);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        /* 포스트 추가 완료 되면  */
+        if ( addPostDone ) {
+            setText('');
+        }
+    }, [addPostDone]);
+
 
     const onSubmit = useCallback(() => {
-        dispatch( addPostAction() );
-        setText('');
-    }, []);
+        dispatch( addPostAction(text) );
+    }, [text]);
 
-    const [text, setText] = useState('');
 
     const onChangeText = useCallback((e) => {
         setText(e.target.value);

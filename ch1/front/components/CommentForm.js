@@ -1,18 +1,39 @@
 import {Button, Form, Input} from "antd";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import useInput from "../hooks/useInput";
 import PropTypes from "prop-types";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {ADD_COMMENT_REQUEST, ADD_POST_REQUEST} from "../reducers/post";
 
 const CommentForm = ({post}) => {
 
+    const dispatch = useDispatch();
+
     // 댓글 작성자 아이디
     const id = useSelector((state) => state.user.me?.id);
-    const [commentText, onChangeCommentText] = useInput('');
+    const { addCommentDone } = useSelector((state) => state.post);
+
+    //const email = useSelector((state) => state.user.me?.email);
+    const [commentText, onChangeCommentText, setCommentText] = useInput('');
+
+    useEffect(() => {
+        if (addCommentDone) {
+            setCommentText('');
+        }
+    }, [addCommentDone]);
+
+    /*const onChangeCommentText = useCallback((e) => {
+        setCommentText(e.target.value);
+    },[commentText]);*/
 
     const onSubmitComment = useCallback(() => {
         console.log('부모글 아이디: ', post.id, commentText)
-    }, [commentText]);
+
+        dispatch({
+            type: ADD_COMMENT_REQUEST,
+            data: { content: commentText, postId: post.id, userId: id }
+        })
+    }, [commentText, id]);
 
     return (
         <>

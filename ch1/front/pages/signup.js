@@ -4,6 +4,8 @@ import {Button, Checkbox, Form, Input} from "antd";
 import {memo, useCallback, useState} from "react";
 import useInput from "../hooks/useInput";
 import styled from "styled-components";
+import {useDispatch, useSelector} from "react-redux";
+import {SIGN_UP_REQUEST} from "../reducers/user";
 
 
 const ErrorMessage = styled.div`
@@ -12,7 +14,10 @@ const ErrorMessage = styled.div`
 
 const Signup = memo(() => {
 
-    const [id, onChangeId] = useInput('');
+    const dispatch = useDispatch();
+    const { signUpLoading  } = useSelector((state) => state.user);
+
+    const [email, onChangeEmail] = useInput('');
     const [nickname, onChangeNickname] = useInput('');
     const [password, onChangePassword] = useInput('');
 
@@ -41,8 +46,13 @@ const Signup = memo(() => {
         if ( !term ) {
             return setTermError(true);
         }
-        console.log(id, nickname, password);
-    }, [password, passwordCheck, term]);
+        console.log(email, nickname, password);
+
+        dispatch({
+            type: SIGN_UP_REQUEST,
+            data: {email, nickname, password},
+        });
+    }, [email, password, passwordCheck, term]);
 
     return (
         <>
@@ -54,14 +64,14 @@ const Signup = memo(() => {
                 </Head>
                 <Form onFinish={ onSubmit }>
                     <div>
-                        <label htmlFor="user-id">아이디</label>
+                        <label htmlFor="user-email">아이디</label>
                         <br/>
-                        <Input name="user-id" value={id} required onChange={onChangeId}/>
+                        <Input name="user-email" type="email"  value={email} required onChange={onChangeEmail}/>
                     </div>
                     <div>
-                        <label htmlFor="user-nick">닉네임</label>
+                        <label htmlFor="user-nickname">닉네임</label>
                         <br/>
-                        <Input name="user-nick" value={nickname} required onChange={onChangeNickname}/>
+                        <Input name="user-nickname" value={nickname} required onChange={onChangeNickname}/>
                     </div>
                     <div>
                         <label htmlFor="user-password">비밀번호</label>
@@ -81,11 +91,11 @@ const Signup = memo(() => {
                     </div>
 
                     <div>
-                        <Checkbox name="user-term" checked={term} onChange={onChangeTerm}>내 말을 잘 들을 것을 동의 합니다.</Checkbox>
+                        <Checkbox name="user-term" checked={ term } onChange={ onChangeTerm }>내 말을 잘 들을 것을 동의 합니다.</Checkbox>
                         {termError && <ErrorMessage>약관에 동의 하셔야 합니다.</ErrorMessage>}
                     </div>
                     <div style={{ marginTop: 10 }}>
-                        <Button type="primary" htmlType="submit">가입하기</Button>
+                        <Button type="primary" htmlType="submit" loading={signUpLoading}>가입하기</Button>
                     </div>
 
                 </Form>

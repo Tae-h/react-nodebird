@@ -29,7 +29,7 @@ const AppLayout = memo(( { children } ) => {
 
     //const [isLoggedIn, setIsLoggedIn] = useState(false); //<-- 이제 리덕스 중앙
     //const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-    const { isLoggedIn } = useSelector((state) => state.user); // 취향 차이
+    const { loginDone, me } = useSelector((state) => state.user); // 취향 차이
 
     return (
         <div>
@@ -50,7 +50,7 @@ const AppLayout = memo(( { children } ) => {
             </Menu>
             <Row gutter={8}>
                 <Col xs={24} md={6} >
-                    { isLoggedIn ? <UserProfile /> : <LoginForm /> }
+                    { me ? <UserProfile /> : <LoginForm /> }
                 </Col>
                 <Col xs={24} md={12} >
                     { children }
