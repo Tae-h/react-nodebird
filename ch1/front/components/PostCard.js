@@ -4,19 +4,30 @@ import {useSelector} from "react-redux";
 import {EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined} from "@ant-design/icons";
 import PropTypes from "prop-types";
 import PostImages from "./PostImages";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 
 
 const PostCard = ({ post }) => {
 
+    const { me } = useSelector((state) => state.user);
+    const id = me?.id;
+
+    const { addPostDone, mainPosts } = useSelector((state) => state.post);
+
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
 
-    const { me } = useSelector((state) => state.user);
-    const id = me?.id;
+    /*useEffect(() => {
+        /!* 포스트 추가 완료 되면  *!/
+        if ( addPostDone ) {
+
+        }
+    }, [addPostDone]);*/
+
+
 
     const onToggleLike = useCallback((e) => {
         setLiked((prev) => !prev);
@@ -31,7 +42,7 @@ const PostCard = ({ post }) => {
             <div style={{ marginBottom: 20 }}>
                 <Card
                     cover={post.Images[0] && <PostImages images={post.Images}/>}
-                    actions={[ /* 배열안에 jsx를 넣을 때는 항상 key 값을 넣어줘야 함 */
+                    actions={[ /* 배열안에 jsx 를 넣을 때는 항상 key 값을 넣어줘야 함 */
                         <RetweetOutlined key={"retweet"}/>,
                         liked ? <HeartTwoTone  twoToneColor={"#eb2f96"} key={"heart"}
                                     onClick={onToggleLike}

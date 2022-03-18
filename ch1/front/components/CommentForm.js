@@ -11,7 +11,7 @@ const CommentForm = ({post}) => {
 
     // 댓글 작성자 아이디
     const id = useSelector((state) => state.user.me?.id);
-    const { addCommentDone } = useSelector((state) => state.post);
+    const { addCommentDone, addCommentLoading } = useSelector((state) => state.post);
 
     //const email = useSelector((state) => state.user.me?.email);
     const [commentText, onChangeCommentText, setCommentText] = useInput('');
@@ -44,8 +44,9 @@ const CommentForm = ({post}) => {
                                    rows={4}
                    />
                    <Button
-                       style={{ position: 'absolute', right: 0, bottom: -40 }}
+                       style={{ position: 'absolute', right: 0, bottom: -40, zIndex: 1}}
                        type={"primary"}
+                       loading={addCommentLoading}
                        htmlType={"submit"}>코멘트 등록!</Button>
                </Form.Item>
 

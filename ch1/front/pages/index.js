@@ -10,12 +10,12 @@ import PostCard from "../components/PostCard";
 * */
 const Home = () => {
 
-    const { isLoggedIn } = useSelector((state) => state.user);
+    const { me } = useSelector((state) => state.user);
     const { mainPosts } = useSelector((state) => state.post );
 
     return (
         <AppLayout> {/* AppLayout 안쪽이 children */}
-            { isLoggedIn && <PostForm />} {/* 로그인 한 사람만 보여야함 */}
+            { me && <PostForm />} {/* 로그인 한 사람만 보여야함 */}
             { mainPosts.map((post, index) => <PostCard  key={ post.id } post={ post }/>) }
         </AppLayout>
     )

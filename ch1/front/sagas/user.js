@@ -26,8 +26,9 @@ function signUpAPI(data) {
 
 /* gen */
 function* logIn(action) {
+    console.log('logIn', action);
     try {
-
+        console.log(action)
         // const result = yield call(loginAPI, action.data, 'a', 'b'); // 나머지는 매개 변
         yield delay(2000);
         yield put({ // put 특정 action 을 dispatch 시켜줌
@@ -36,6 +37,7 @@ function* logIn(action) {
             data: action.data
         });
     } catch (err) { // err.response.data
+        console.error(err)
         yield put({
             type: LOG_IN_FAILURE,
             error: err.response.data,

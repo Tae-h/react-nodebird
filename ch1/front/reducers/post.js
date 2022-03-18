@@ -1,8 +1,10 @@
+import shortid from 'shortid';
+
 export const initialState = {
     mainPosts: [ // 더미 데이터
         {
             id: 1,
-            User: {id: 1, nickname: '테스터1'},
+            User: {id: 1, nickname: 'Tae-h'},
             content: '테스트 #해시태그 #해시태그2 ',
             Images: [
                 {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
@@ -66,13 +68,19 @@ export const initialState = {
     addCommentError: null,
 };
 
-const dummyData = {
-    id: 5,
-    User: {id: 1, nickname: '테스터1'},
-    content: '추가 글 등록',
+const dummyData = (data) => ({
+    id: shortid.generate(),
+    User: {id: 1, nickname: 'Tae-h'},
+    content: data,
     Images: [],
     Comments: []
-}
+})
+
+const dummyComment = (data) => ({
+    id: shortid.generate(),
+    User: {id: 1, nickname: 'Tae-h'},
+    content: data,
+});
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -111,7 +119,7 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 //mainPosts: [...state.mainPosts, dummyData]
-                mainPosts: [dummyData, ...state.mainPosts], // 순서 주의 data 먼저 넣어야 앞에 추가
+                mainPosts: [dummyData(action.data), ...state.mainPosts], // 순서 주의 data 먼저 넣어야 앞에 추가
                 addPostLoading: false,
                 addPostDone: true,
             };
@@ -133,8 +141,17 @@ const reducer = (state = initialState, action) => {
             }
         }
         case ADD_COMMENT_SUCCESS: {
+
+            // 이 부분은 나중에 쿼리로 한방에 해결!
+            const postIdx = state.mainPosts.findIndex((v) => v.id === action.data.postId);
+            const post = {...state.mainPosts[postIdx]};
+            post.Comments = [dummyComment(action.data.content), ...post.Comments];
+
+            const mainPosts = [...state.mainPosts]
+            mainPosts[postIdx] = post;
             return {
                 ...state,
+                mainPosts,
                 addCommentLoading: false,
                 addCommentDone: true,
             };

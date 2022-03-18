@@ -16,6 +16,9 @@ export const initialState = {
     signUpDone: false,
     signUpError: null,
 
+    changeNicknameLoading: false, // 닉네임 변경
+    changeNicknameDone: false,
+    changeNicknameError: null,
 };
 
 /* thunk 이렇게 쓰는게 끝임 */
@@ -52,6 +55,9 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
+export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
+export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 
 
 export const loginRequestAction  = (data) => {
@@ -67,18 +73,26 @@ export const logoutRequestAction  = () => {
     }
 }
 
+export const changeNicknameRequestAction = (data) => {
+    return {
+        type: CHANGE_NICKNAME_REQUEST,
+        data,
+    }
+}
+
 const dummyUser = (data) => ({
     ...data,
     nickname: 'Tae-h',
     id: 1,
-    Posts: [],
-    Followings: [],
-    Followers: [],
+    Posts: [{id: 1}],
+    Followings: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
+    Followers: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
 });
 
 const reducer = (state = initialState, action) => {
 
     switch (action.type) {
+        /* 로그인 */
         case LOG_IN_REQUEST: {
             return {
                 ...state,
@@ -92,7 +106,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 loginLoading: false,
                 loginDone: true,
-                me: dummyUser(...action.data),
+                me: dummyUser(action.data),
             };
         }
         case LOG_IN_FAILURE: { // 로그인 실패 시
@@ -103,7 +117,7 @@ const reducer = (state = initialState, action) => {
                 loginError: action.error,
             };
         }
-
+        /* 로그아웃 */
         case LOG_OUT_REQUEST: {
             return {
                 ...state,
@@ -126,7 +140,7 @@ const reducer = (state = initialState, action) => {
                 logoutError: action.error,
             }
         }
-
+        /* 회원가입 */
         case SIGN_UP_REQUEST: {
             return {
                 ...state,
@@ -147,6 +161,29 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 signUpLoading: false,
                 signUpError: action.error,
+            }
+        }
+        /* 닉네임 변경 */
+        case CHANGE_NICKNAME_REQUEST: {
+            return {
+                ...state,
+                changeNicknameLoading: true,
+                changeNicknameDone: false,
+                changeNicknameError: null,
+            }
+        }
+        case CHANGE_NICKNAME_SUCCESS: {
+            return {
+                ...state,
+                changeNicknameLoading: false,
+                changeNicknameDone: true,
+            }
+        }
+        case CHANGE_NICKNAME_FAILURE: {
+            return {
+                ...state,
+                changeNicknameLoading: false,
+                changeNicknameError: action.error,
             }
         }
         default:
