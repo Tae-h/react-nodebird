@@ -59,6 +59,8 @@ export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
 export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
 export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';// 본인 게시글 추가
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';// 본인 게시글 삭제
 
 export const loginRequestAction  = (data) => {
     return {
@@ -85,8 +87,8 @@ const dummyUser = (data) => ({
     nickname: 'Tae-h',
     id: 1,
     Posts: [{id: 1}],
-    Followings: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
-    Followers: [{ nickname: '부기초' }, { nickname: 'Chanho Lee' }, { nickname: 'neue zeal' }],
+    Followings: [{ nickname: '팔로잉1' }, { nickname: '팔로잉2' }, { nickname: '팔로잉3' }],
+    Followers: [{ nickname: '팔로워1' }, { nickname: '팔로워2' }, { nickname: '팔로워3' }],
 });
 
 const reducer = (state = initialState, action) => {
@@ -184,6 +186,24 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 changeNicknameLoading: false,
                 changeNicknameError: action.error,
+            }
+        }
+        case ADD_POST_TO_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me, // 불변성 중요!
+                    Posts: [{id: action.data}, ...state.me.Posts],
+                }
+            }
+        }
+        case REMOVE_POST_OF_ME: {
+            return {
+                ...state,
+                me: {
+                    ...state.me, // 불변성 중요!
+                    Posts: state.me.Posts.filter((v) => v.id !== action.data)
+                }
             }
         }
         default:

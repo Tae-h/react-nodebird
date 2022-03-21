@@ -1,4 +1,5 @@
 import shortid from 'shortid';
+import {ADD_POST_TO_ME} from "./user";
 
 export const initialState = {
     mainPosts: [ // 더미 데이터
@@ -7,14 +8,15 @@ export const initialState = {
             User: {id: 1, nickname: 'Tae-h'},
             content: '테스트 #해시태그 #해시태그2 ',
             Images: [
-                {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
             ],
             Comments: [
-                {User: {nickname: '댓글러1-1'}, content: '코멘트 1-1'},
-                {User: {nickname: '댓글러1-2'}, content: '코멘트 1-2'}
+
+                {id: shortid.generate(), User: {id: shortid.generate(), nickname: '댓글러1-1'}, content: '코멘트 1-1'},
+                {id: shortid.generate(), User: {id: shortid.generate(), nickname: '댓글러1-2'}, content: '코멘트 1-2'}
             ]
         },
         {
@@ -22,13 +24,13 @@ export const initialState = {
             User: {id: 2, nickname: '테스터2'},
             content: '테스트 글입니당!2',
             Images: [
-                {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003311/rn_view_BN003311.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003311/rn_view_BN003311.jpg'},
             ],
             Comments: [
-                {User: {nickname: '댓글러2-1'}, content: '코멘트 2-1'},
-                {User: {nickname: '댓글러2-2'}, content: '코멘트 2-2'}
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러2-1'}, content: '코멘트 2-1'},
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러2-2'}, content: '코멘트 2-2'}
             ]
         },
         {
@@ -36,12 +38,12 @@ export const initialState = {
             User: {id: 3, nickname: '테스터3'},
             content: '테스트 글입니당!3',
             Images: [
-                {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
-                {src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003330/rn_view_BN003330.jpg'},
             ],
             Comments: [
-                {User: {nickname: '댓글러3-1'}, content: '코멘트 3-1'},
-                {User: {nickname: '댓글러3-2'}, content: '코멘트 3-2'}
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러3-1'}, content: '코멘트 3-1'},
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러3-2'}, content: '코멘트 3-2'}
             ]
         },
         {
@@ -49,11 +51,11 @@ export const initialState = {
             User: {id: 4, nickname: '테스터4'},
             content: '테스트 글입니당!4',
             Images: [
-                {src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
+                {id: shortid.generate(),src: 'https://gimg.gilbut.co.kr/book/BN003341/rn_view_BN003341.jpg'},
             ],
             Comments: [
-                {User: {nickname: '댓글러4-1'}, content: '코멘트 4-1'},
-                {User: {nickname: '댓글러4-2'}, content: '코멘트 4-2'}
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러4-1'}, content: '코멘트 4-1'},
+                {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러4-2'}, content: '코멘트 4-2'}
             ]
         },
     ],
@@ -66,12 +68,16 @@ export const initialState = {
     addCommentLoading: false,
     addCommentDone: false,
     addCommentError: null,
+
+    removePostLoading: false,
+    removePostDone: false,
+    removePostError: null,
 };
 
 const dummyData = (data) => ({
-    id: shortid.generate(),
+    id: data.id,
     User: {id: 1, nickname: 'Tae-h'},
-    content: data,
+    content: data.content,
     Images: [],
     Comments: []
 })
@@ -85,6 +91,10 @@ const dummyComment = (data) => ({
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
@@ -104,6 +114,9 @@ export const addCommentAction = (data) => {
         data,
     }
 }
+
+
+
 const reducer = (state = initialState, action) => {
 
     switch (action.type) {
@@ -161,6 +174,31 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 addCommentLoading: false,
                 addCommentError: action.error,
+            }
+        }
+
+
+        case REMOVE_POST_REQUEST: {
+            return {
+                ...state,
+                removePostLoading: true,
+                removePostDone: false,
+                removePostError: null,
+            }
+        }
+        case REMOVE_POST_SUCCESS: {
+            return {
+                ...state,
+                mainPosts: state.mainPosts.filter((v) => v.id !== action.data), // data 가 아이디
+                removePostLoading: false,
+                removePostDone: true,
+            };
+        }
+        case REMOVE_POST_FAILURE: {
+            return {
+                ...state,
+                removePostLoading: false,
+                removePostError: action.error,
             }
         }
         default:

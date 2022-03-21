@@ -1,20 +1,22 @@
 import {Avatar, Button, Card, Comment, Image, List, Popover} from "antd";
 import Connect from "react-redux/lib/connect/connect";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {EllipsisOutlined, HeartOutlined, HeartTwoTone, MessageOutlined, RetweetOutlined} from "@ant-design/icons";
 import PropTypes from "prop-types";
 import PostImages from "./PostImages";
 import {useCallback, useEffect, useState} from "react";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
+import {REMOVE_POST_REQUEST, removePostAction} from "../reducers/post";
 
 
 const PostCard = ({ post }) => {
 
+    const dispatch = useDispatch();
     const { me } = useSelector((state) => state.user);
     const id = me?.id;
 
-    const { addPostDone, mainPosts } = useSelector((state) => state.post);
+    const { addPostDone, mainPosts, removePostLoading} = useSelector((state) => state.post);
 
     const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -37,6 +39,13 @@ const PostCard = ({ post }) => {
         setCommentFormOpened((prev) => !prev);
     }, [commentFormOpened]);
 
+    const onRemovePost = useCallback(() => {
+        dispatch({
+            type: REMOVE_POST_REQUEST,
+            data: post.id
+        });
+    }, []);
+
     return (
         <>
             <div style={{ marginBottom: 20 }}>
@@ -55,7 +64,13 @@ const PostCard = ({ post }) => {
                                 {(id && post.User.id === id) ? (
                                     <>
                                         <Button key={"modify_" + post.id}>수정</Button>
-                                        <Button key={"delete_" + post.id} type="danger">삭제</Button>
+                                        <Button key={"delete_" + post.id}
+                                                type="danger"
+                                                loading={ removePostLoading }
+                                                onClick={ onRemovePost }
+                                        >
+                                            삭제
+                                        </Button>
                                     </>)
                                  : <Button key={"report_" + post.id}>신고</Button>
                                 }
