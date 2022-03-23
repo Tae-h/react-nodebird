@@ -1,3 +1,4 @@
+import produce from "immer"
 
 export const initialState = {
     me: null, // 요거 데이터 형식이 뭐지....
@@ -92,123 +93,91 @@ const dummyUser = (data) => ({
 });
 
 const reducer = (state = initialState, action) => {
+    return produce(state, (draft) => {
+        switch (action.type) {
+            /* 로그인 */
+            case LOG_IN_REQUEST: {
+                draft.loginLoading = true; // 로그인 중
+                draft.loginError = null;
+                draft.loginDone = false;
+                break;
+            }
+            case LOG_IN_SUCCESS: {
+                draft.loginLoading = false;
+                draft.loginDone = true;
+                draft.me = dummyUser(action.data);
+                break;
+            }
+            case LOG_IN_FAILURE: { // 로그인 실패 시
+                draft.loginDone = false;
+                draft.loginLoading = false;
+                draft.loginError = action.error;
+                break;
+            }
+            /* 로그아웃 */
+            case LOG_OUT_REQUEST: {
+                draft.logoutLoading = true;
+                draft.logoutDone = false;
+                break;
+            }
+            case LOG_OUT_SUCCESS: {
+                draft.logoutDone = true;
+                draft.logoutLoading = false;
+                draft.me = null;
+                break;
+            }
+            case LOG_OUT_FAILURE: {
+                draft.logoutLoading = false;
+                draft.logoutError = action.error;
+                break;
+            }
+            /* 회원가입 */
+            case SIGN_UP_REQUEST: {
+                draft.signUpLoading = true;
+                draft.signUpDone = false;
+                break;
+            }
+            case SIGN_UP_SUCCESS: {
+                draft.signUpLoading = false;
+                draft.signUpDone = true;
+                draft.me = null;
+                break;
+            }
+            case SIGN_UP_FAILURE: {
+                draft.signUpLoading = false;
+                draft.signUpError = action.error;
+                break;
+            }
+            /* 닉네임 변경 */
+            case CHANGE_NICKNAME_REQUEST: {
+                draft.changeNicknameLoading = true;
+                draft.changeNicknameDone = false;
+                draft.changeNicknameError = null;
+                break;
+            }
+            case CHANGE_NICKNAME_SUCCESS: {
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameDone = true;
+                break;
+            }
+            case CHANGE_NICKNAME_FAILURE: {
+                draft.changeNicknameLoading = false;
+                draft.changeNicknameError = action.error;
+                break;
+            }
+            case ADD_POST_TO_ME: {
+                draft.me.Posts.unshift({id: action.data});
+                break;
+            }
+            case REMOVE_POST_OF_ME: {
+                draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
+                break;
+            }
+            default:
+                break;
+        }
+    });
 
-    switch (action.type) {
-        /* 로그인 */
-        case LOG_IN_REQUEST: {
-            return {
-                ...state,
-                loginLoading: true, // 로그인 중
-                loginError: null,
-                loginDone: false,
-            };
-        }
-        case LOG_IN_SUCCESS: {
-            return {
-                ...state,
-                loginLoading: false,
-                loginDone: true,
-                me: dummyUser(action.data),
-            };
-        }
-        case LOG_IN_FAILURE: { // 로그인 실패 시
-            return {
-                ...state,
-                loginDone: false,
-                loginLoading: false,
-                loginError: action.error,
-            };
-        }
-        /* 로그아웃 */
-        case LOG_OUT_REQUEST: {
-            return {
-                ...state,
-                logoutLoading: true,
-                logoutDone: false,
-            }
-        }
-        case LOG_OUT_SUCCESS: {
-            return {
-                ...state,
-                logoutDone: true,
-                logoutLoading: false,
-                me: null,
-            }
-        }
-        case LOG_OUT_FAILURE: {
-            return {
-                ...state,
-                logoutLoading: false,
-                logoutError: action.error,
-            }
-        }
-        /* 회원가입 */
-        case SIGN_UP_REQUEST: {
-            return {
-                ...state,
-                signUpLoading: true,
-                signUpDone: false,
-            }
-        }
-        case SIGN_UP_SUCCESS: {
-            return {
-                ...state,
-                signUpLoading: false,
-                signUpDone: true,
-                me: null,
-            }
-        }
-        case SIGN_UP_FAILURE: {
-            return {
-                ...state,
-                signUpLoading: false,
-                signUpError: action.error,
-            }
-        }
-        /* 닉네임 변경 */
-        case CHANGE_NICKNAME_REQUEST: {
-            return {
-                ...state,
-                changeNicknameLoading: true,
-                changeNicknameDone: false,
-                changeNicknameError: null,
-            }
-        }
-        case CHANGE_NICKNAME_SUCCESS: {
-            return {
-                ...state,
-                changeNicknameLoading: false,
-                changeNicknameDone: true,
-            }
-        }
-        case CHANGE_NICKNAME_FAILURE: {
-            return {
-                ...state,
-                changeNicknameLoading: false,
-                changeNicknameError: action.error,
-            }
-        }
-        case ADD_POST_TO_ME: {
-            return {
-                ...state,
-                me: {
-                    ...state.me, // 불변성 중요!
-                    Posts: [{id: action.data}, ...state.me.Posts],
-                }
-            }
-        }
-        case REMOVE_POST_OF_ME: {
-            return {
-                ...state,
-                me: {
-                    ...state.me, // 불변성 중요!
-                    Posts: state.me.Posts.filter((v) => v.id !== action.data)
-                }
-            }
-        }
-        default:
-            return state;
-    }
 }
 
 export default reducer;
