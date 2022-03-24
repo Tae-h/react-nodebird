@@ -20,6 +20,14 @@ export const initialState = {
     changeNicknameLoading: false, // 닉네임 변경
     changeNicknameDone: false,
     changeNicknameError: null,
+
+    followLoading: false,
+    followDone: false,
+    followError: null,
+
+    unFollowLoading: false,
+    unFollowDone: false,
+    unFollowError: null,
 };
 
 /* thunk 이렇게 쓰는게 끝임 */
@@ -95,6 +103,44 @@ const dummyUser = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            /* 필로우 */
+            case FOLLOW_REQUEST: {
+                draft.followLoading = true;
+                draft.followError = null;
+                draft.followDone = false;
+                break;
+            }
+            case FOLLOW_SUCCESS: {
+                draft.followLoading = false;
+                draft.followDone = true;
+                draft.me.Followings.push({id: action.data});
+                break;
+            }
+            case FOLLOW_FAILURE: {
+                draft.followDone = false;
+                draft.followLoading = false;
+                draft.followError = action.error;
+                break;
+            }
+            /* 언팔팔*/
+            case UNFOLLOW_REQUEST: {
+                draft.unFollowLoading = true;
+                draft.unFollowError = null;
+                draft.unFollowDone = false;
+                break;
+            }
+            case UNFOLLOW_SUCCESS: {
+                draft.unFollowLoading = false;
+                draft.unFollowDone = true;
+                draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+                break;
+            }
+            case UNFOLLOW_FAILURE: {
+                draft.unFollowDone = false;
+                draft.unFollowLoading = false;
+                draft.unFollowError = action.error;
+                break;
+            }
             /* 로그인 */
             case LOG_IN_REQUEST: {
                 draft.loginLoading = true; // 로그인 중

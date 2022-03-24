@@ -1,6 +1,7 @@
 import shortid from 'shortid';
 import {ADD_POST_TO_ME} from "./user";
 import produce from "immer";
+import faker from 'faker';
 
 export const initialState = {
     mainPosts: [ // 더미 데이터
@@ -62,6 +63,10 @@ export const initialState = {
     ],
     imagePaths: [], // <-- 이미지 업로드시 경로 저장
 
+    loadPostsLoading: false,
+    loadPostsDone: false,
+    loadPostsError: null,
+
     addPostLoading: false,
     addPostDone: false,
     addPostError: null,
@@ -73,6 +78,8 @@ export const initialState = {
     removePostLoading: false,
     removePostDone: false,
     removePostError: null,
+
+    hasMorePosts: true, // true 일때만 가져올거임!
 };
 
 const dummyData = (data) => ({
@@ -88,6 +95,37 @@ const dummyComment = (data) => ({
     User: {id: 1, nickname: 'Tae-h'},
     content: data,
 });
+
+export const generateDummyPost = (number) =>
+    Array(number).fill().map(() => ({
+        id: shortid.generate(),
+        User: {
+            id: shortid.generate(),
+            nickname: faker.name.findName(),
+        },
+        content: faker.lorem.paragraph(),
+        Images: [
+            {id: shortid.generate(), src: faker.image.image()},
+        ],
+        Comments: [
+            {
+                id: shortid.generate(),
+                User: {
+                    id: shortid.generate(),
+                    nickname: faker.name.findName(),
+                },
+                content: faker.lorem.sentence(),
+            },
+        ],
+}));
+
+
+//initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(20));
+
+/* 화면 로드 */
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -124,6 +162,24 @@ const reducer = (state = initialState, action) => {
         // state 기 draft (다음 상태) 로 변함 state --> draft 불변성 보장
 
         switch (action.type) {
+            case LOAD_POSTS_REQUEST: {
+                draft.loadPostsLoading = true;
+                draft.loadPostsDone = false;
+                draft.loadPostsError = null;
+                break;
+            }
+            case LOAD_POSTS_SUCCESS: {
+                draft.loadPostsLoading = false;
+                draft.loadPostsDone = true;
+                draft.mainPosts = action.data.concat(draft.mainPosts);
+                draft.hasMorePosts = draft.mainPosts.length < 50;
+                break;
+            }
+            case LOAD_POSTS_FAILURE: {
+                draft.loadPostsLoading =  false;
+                draft.loadPostsError = action.error;
+                break;
+            }
             case ADD_POST_REQUEST: {
                 draft.addPostLoading = true;
                 draft.addPostDone = false;
@@ -143,7 +199,7 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case ADD_POST_FAILURE: {
-                draft.addPostLoading =  false;
+                draft.addPostLoading = false;
                 draft.addPostError = action.error;
                 break;
             }
@@ -180,7 +236,7 @@ const reducer = (state = initialState, action) => {
 
             case REMOVE_POST_REQUEST: {
                 draft.removePostLoading = true;
-                draft.removePostDone =false;
+                draft.removePostDone = false;
                 draft.removePostError = null;
                 break;
             }
@@ -203,3 +259,6 @@ const reducer = (state = initialState, action) => {
 }
 
 export default reducer;
+
+export class LOAD_POST_REQUESTS {
+}

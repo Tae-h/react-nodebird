@@ -2,12 +2,20 @@ import {fork, all, put, call, delay, takeLatest} from "redux-saga/effects";
 //import { takeLatest} from "redux-saga";
 import axios from "axios";
 import {
+    FOLLOW_FAILURE,
+    FOLLOW_REQUEST, FOLLOW_SUCCESS,
     LOG_IN_FAILURE,
     LOG_IN_REQUEST,
     LOG_IN_SUCCESS,
     LOG_OUT_FAILURE,
     LOG_OUT_REQUEST,
-    LOG_OUT_SUCCESS, SIGN_UP_FAILURE, SIGN_UP_REQUEST, SIGN_UP_SUCCESS
+    LOG_OUT_SUCCESS,
+    SIGN_UP_FAILURE,
+    SIGN_UP_REQUEST,
+    SIGN_UP_SUCCESS,
+    UNFOLLOW_FAILURE,
+    UNFOLLOW_REQUEST,
+    UNFOLLOW_SUCCESS
 } from "../reducers/user";
 
 /* API */
@@ -23,6 +31,13 @@ function signUpAPI(data) {
     return axios.post('/api/signup', data)
 }
 
+function followAPI(data) {
+    return axios.post('/api/follow', data)
+}
+
+function unFollowAPI(data) {
+    return axios.post('/api/unfollow', data)
+}
 
 /* gen */
 function* logIn(action) {
@@ -81,6 +96,38 @@ function* signUp() {
     }
 }
 
+function* follow(action) {
+    try {
+        yield delay(1000);
+
+        yield put({
+            type: FOLLOW_SUCCESS,
+            data: action.data,
+        })
+    } catch (err) {
+        yield put({
+            type: FOLLOW_FAILURE,
+            error: err.response.data,
+        })
+    }
+}
+
+function* unFollow(action) {
+    try {
+        yield delay(1000);
+
+        yield put({
+            type: UNFOLLOW_SUCCESS,
+            data: action.data
+        })
+    } catch (err) {
+        yield put({
+            type: UNFOLLOW_FAILURE,
+            error: err.response.data,
+        })
+    }
+}
+
 
 // 이벤트 리스너 같은 역할
 function* watchLogIn() { // 문제: 한 번 밖에 호출 못함 ex) 로그인 -> 로그 아웃 -> 로그인 하려고 하면 이 이벤트 리스너가 사라짐
@@ -105,12 +152,22 @@ function* watchSignUp() {
     yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
+function* watchFollow() {
+    yield takeLatest(FOLLOW_REQUEST, follow);
+}
+
+function* watchUnFollow() {
+    yield takeLatest(UNFOLLOW_REQUEST, unFollow);
+}
+
 export default function* userSaga () {
 
     yield all([
         fork(watchLogIn),
         fork(watchLogOut),
         fork(watchSignUp),
+        fork(watchFollow),
+        fork(watchUnFollow),
 
     ])
 }
