@@ -1,0 +1,19 @@
+
+// sequelize 에서는 table 을 model  이라고 부름!
+module.exports = (sequelize, DataTypes) => {
+
+    const Post = sequelize.define('Post', { // Mysql 에는 posts  테이블로 저장
+        content: {
+            type: DataTypes.TEXT,
+            allowNull: false,
+
+        },
+
+    }, {
+        charset: 'utf8mb4', // 이모티콘 넣으려면 mb4 추가
+        collate: 'utf8mb4-general-ci', // 한글 + 이모티콘 저장
+
+    });
+    Post.associate = (db) => {};
+    return Post;
+}
