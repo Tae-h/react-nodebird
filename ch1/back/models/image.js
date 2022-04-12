@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         charset: 'utf8', // 이모티콘 넣으려면 mb4 추가
-        collate: 'utf8-general-ci', // 한글 + 이모티콘 저장
+        collate: 'utf8_general_ci', // 한글 + 이모티콘 저장
 
     });
     Image.associate = (db) => {

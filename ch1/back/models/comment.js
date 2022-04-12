@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
 
     }, {
         charset: 'utf8mb4', // 이모티콘 넣으려면 mb4 추가
-        collate: 'utf8mb4-general-ci', // 한글 + 이모티콘 저장
+        collate: 'utf8mb4_general_ci', // 한글 + 이모티콘 저장
 
     });
     Comment.associate = (db) => {
