@@ -18,8 +18,10 @@ server.listen(3060, () => {
 });*/
 
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const postRouter = require('./routes/post');
+const userRouter = require('./routes/user');
 const db = require('./models');
 
 db.sequelize.sync()
@@ -37,6 +39,12 @@ app.patch --> 부분 수정
 app.options --> 찔러보기
 app.head --> 안씀 헤더만 가져오기
 */
+app.use(cors({
+    origin: '*',
+    credentials: false,
+})); // 모든 요청에 res.setHeader('Access-Control-Allow-Origin', '*'); 를 넣어줌
+app.use(express.json());
+app.use(express.urlencoded( {extended: true} ));
 
 app.get('/', (req, res) => {
     res.send('Hello Express!');
@@ -53,6 +61,7 @@ app.get('/posts', (req, res) => {
 
 /* router 분리 하기 */
 app.use('/post', postRouter);
+app.use('/user', userRouter);
 
 
 app.listen(3060, () => {
