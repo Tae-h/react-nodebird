@@ -3,7 +3,8 @@ import axios from 'axios';
 import postSaga from "./post";
 import userSaga from "./user";
 
-
+/* baseUrl setting */
+axios.defaults.baseURL = 'http://localhost:3060';
 
 export default function* rootSaga() { // gen 함수 rootSaga.next() 를 해야 실행
     yield all([ // all: 배열 내에 있는 것을 모두 실행시킨다.

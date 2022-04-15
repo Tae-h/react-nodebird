@@ -20,7 +20,7 @@ import {
 
 /* API */
 function loginAPI(data) {
-    return axios.post('/api/login', data);
+    return axios.post('/user/login', data);
 }
 
 function logoutAPI() {
@@ -28,7 +28,7 @@ function logoutAPI() {
 }
 
 function signUpAPI(data) {
-    return axios.post('http://localhost:3060/user', data)
+    return axios.post('/user', data)
 }
 
 function followAPI(data) {
@@ -44,12 +44,12 @@ function* logIn(action) {
     console.log('logIn', action);
     try {
         console.log(action)
-        // const result = yield call(loginAPI, action.data, 'a', 'b'); // 나머지는 매개 변
-        yield delay(2000);
+        const result = yield call(loginAPI, action.data); // 나머지는 매개 변
+        //yield delay(2000);
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: LOG_IN_SUCCESS,
             //data: result.data // 성공 결과
-            data: action.data
+            data: result.data,
         });
     } catch (err) { // err.response.data
         console.error(err)
