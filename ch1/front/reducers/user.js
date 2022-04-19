@@ -151,7 +151,7 @@ const reducer = (state = initialState, action) => {
             case LOG_IN_SUCCESS: {
                 draft.loginLoading = false;
                 draft.loginDone = true;
-                draft.me = dummyUser(action.data);
+                draft.me = action.data;
                 break;
             }
             case LOG_IN_FAILURE: { // 로그인 실패 시

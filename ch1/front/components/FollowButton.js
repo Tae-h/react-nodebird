@@ -9,7 +9,7 @@ const FollowButton= memo(({ post }) => {
     const { me, followLoading, unFollowLoading } = useSelector((state) => state.user);
 
     // 팔로잉 여부
-    const isFollowing = me?.Followings.find((v) => v.id === post.User.id);
+    const isFollowing = me?.Followings?.find((v) => v.id === post.User.id);
 
     const onClickFollow = useCallback(() => {
 

@@ -21,11 +21,13 @@ module.exports = () => {
                 // 입력한 패스워드, db 저장된 패스워드
                 const result = await bcrypt.compare(password, user.password);
 
+                console.log('일치!: ', result)
                 if ( result ) {
                     return done(null, user);
-                } else {
-                    return done(null, false, {reason: '비밀번호가 일치하지 않습니다.'});
                 }
+
+                return done(null, false, {reason: '비밀번호가 일치하지 않습니다.'});
+
             } catch (err) {
                 console.error(err);
                 return done(err);

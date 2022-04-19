@@ -20,16 +20,26 @@ router.post('/login', async (req, res, next) => {
         if ( info ) {
             return res.status(401).send(info.reason);
         }
-
-        return req.login(user, async (loginError) => {
-            if ( loginError ) {
-                console.error(loginError);
-                return next(loginError);
+        // passport login 실행!
+        return req.login(user, async (loginErr) => {
+            console.log(user);
+            if ( loginErr ) {
+                console.error('에러!!', loginErr);
+                return next(loginErr);
             }
             return res.status(200).json(user); // success 일 경우 전달!!
         });
     }) (req, res, next);
 });
+
+
+router.post('/logout', async (req, res, next) => {
+    //req.user <-- 정보를 들고 있음
+    req.logout();
+    req.session.destroy();
+    res.send('logout ok!');
+})
+
 
 // default
 router.post('/',  async (req, res, next) => {
