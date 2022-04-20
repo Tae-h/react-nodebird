@@ -53,6 +53,9 @@ app.patch --> 부분 수정
 app.options --> 찔러보기
 app.head --> 안씀 헤더만 가져오기
 */
+/**
+ *  use 안에 들어가는 내용은 전부 미들웨어!!!
+ */
 app.use(cors({
     origin: '*',
     credentials: false,
@@ -87,6 +90,10 @@ app.get('/posts', (req, res) => {
 app.use('/post', postRouter);
 app.use('/user', userRouter);
 
+/* 에러처리 미들웨어 */
+app.use((err, req, res, next) => {
+
+})
 
 app.listen(3060, () => {
     console.log('express server running on port 3060!!!');

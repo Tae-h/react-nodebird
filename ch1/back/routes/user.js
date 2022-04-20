@@ -1,13 +1,13 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const passport = require('passport');
-const { User } = require('../models');
-
+const { User, Post } = require('../models');
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares')
 
 const router = express.Router();
 
 // login --> /user/login
-router.post('/login', async (req, res, next) => {
+router.post('/login', isNotLoggedIn, async (req, res, next) => {
     /* 미들웨어 확장 */
     passport.authenticate('local', (err, user, info) => {
         // server err!!
@@ -22,18 +22,36 @@ router.post('/login', async (req, res, next) => {
         }
         // passport login 실행!
         return req.login(user, async (loginErr) => {
-            console.log(user);
             if ( loginErr ) {
                 console.error('에러!!', loginErr);
-                return next(loginErr);
+                return next(loginErr); // next 안에 err가 있으면 에러처리 미들웨어로 감
             }
-            return res.status(200).json(user); // success 일 경우 전달!!
+
+            // 시퀄라이즈가 알아서 join 해서 select 해줌!! 그래서 편함... 하지만 mybatis 가 난 더 편함!!
+            const fullUserWithoutPassword = await User.findOne({
+                where: {
+                    id: user.id,
+                },
+                attributes:
+                    { exclude: ['password'] }, // password 만 빼고!! select
+                    //[  'id', 'email', 'nickname'],  // select columns 부분
+                include: [{
+                    model: Post,
+                }, {
+                    model: User,
+                    as: 'Followings'
+                }, {
+                    model: User,
+                    as: 'Followers',
+                }]
+            })
+            return res.status(200).json(fullUserWithoutPassword); // success 일 경우 전달!!
         });
     }) (req, res, next);
 });
 
 
-router.post('/logout', async (req, res, next) => {
+router.post('/logout', isLoggedIn, async (req, res, next) => {
     //req.user <-- 정보를 들고 있음
     req.logout();
     req.session.destroy();
@@ -41,8 +59,8 @@ router.post('/logout', async (req, res, next) => {
 })
 
 
-// default
-router.post('/',  async (req, res, next) => {
+// default 회원가입
+router.post('/',  isNotLoggedIn, async (req, res, next) => {
     try {
         const exUser = await User.findOne({
             where: {

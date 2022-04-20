@@ -1,5 +1,5 @@
 import {Button, Form, Input} from 'antd';
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import Link  from 'next/link';
 import styled from 'styled-components';
 import PropTypes from "prop-types";
@@ -16,10 +16,17 @@ const FormWrapper = styled(Form)`
 const LoginForm = () => {
     const dispatch = useDispatch();
 
-    const { loginLoading } = useSelector((state) => state.user);
+    const { loginLoading, loginError } = useSelector((state) => state.user);
 
     const [email, onChangeEmail] = useInput('');
     const [password, onChangePassword] = useInput('');
+
+
+    useEffect(() => {
+        if ( loginError ) {
+            alert(loginError);
+        }
+    }, [loginError])
 
 
     /* useMemo 값을 캐싱 하기 때문에 이렇게도 많이 사용! */

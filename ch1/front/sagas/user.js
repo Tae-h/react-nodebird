@@ -24,7 +24,7 @@ function loginAPI(data) {
 }
 
 function logoutAPI() {
-    return axios.post('/api/logout');
+    return axios.post('/user/logout');
 }
 
 function signUpAPI(data) {
@@ -64,8 +64,7 @@ function* logIn(action) {
 function* logOut() {
     try {
 
-        //const result = yield call(logoutAPI);
-        yield delay(1000);
+        const result = yield call(logoutAPI);
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: LOG_OUT_SUCCESS,
            // data: result.data // 성공 결과
