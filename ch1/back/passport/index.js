@@ -9,6 +9,7 @@ module.exports = () => {
         done(null, user.id);
     });
 
+    // 라우터 접근시 deserializeUser 호출!
     passport.deserializeUser(async (id, done) => {
         // async 있으면 무조건 try catch!!
         try {

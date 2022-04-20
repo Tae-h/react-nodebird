@@ -57,8 +57,9 @@ app.head --> 안씀 헤더만 가져오기
  *  use 안에 들어가는 내용은 전부 미들웨어!!!
  */
 app.use(cors({
-    origin: '*',
-    credentials: false,
+    //origin: 'http://localhost:3000',
+    origin: true,
+    credentials: true, // true: 쿠키까지 같이 전달
 })); // 모든 요청에 res.setHeader('Access-Control-Allow-Origin', '*'); 를 넣어줌
 app.use(express.json());
 app.use(express.urlencoded( {extended: true} ));
