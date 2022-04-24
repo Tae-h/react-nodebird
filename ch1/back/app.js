@@ -23,9 +23,10 @@ const dotenv = require('dotenv');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require("passport");
-
+const morgan = require('morgan');
 
 const postRouter = require('./routes/post');
+const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 const db = require('./models');
 const passportConfig = require('./passport');
@@ -56,6 +57,7 @@ app.head --> 안씀 헤더만 가져오기
 /**
  *  use 안에 들어가는 내용은 전부 미들웨어!!!
  */
+app.use(morgan('dev'));
 app.use(cors({
     //origin: 'http://localhost:3000',
     origin: true,
@@ -79,16 +81,11 @@ app.get('/', (req, res) => {
 
 });
 
-app.get('/posts', (req, res) => {
-    res.json([
-        {id: 1, content: 'Hello1'},
-        {id: 2, content: 'Hello2'},
-        {id: 3, content: 'Hello3'}
-    ]);
-});
+
 
 /* router 분리 하기 */
 app.use('/post', postRouter);
+app.use('/posts', postsRouter);
 app.use('/user', userRouter);
 
 /* 에러처리 미들웨어 */

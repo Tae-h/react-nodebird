@@ -6,6 +6,47 @@ const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 
 const router = express.Router();
 
+
+// GET user 정보
+// 모든 요청을 보낼때 요청함..?
+router.get('/', async (req, res, next) => {
+
+    try {
+        if ( req.user ) {
+            const fullUserWithoutPassword = await User.findOne({
+                where: { id: req.user.id },
+                attributes: { // 비밀번호 제외
+                    exclude: ['password']
+                },
+                include: [{ // join 한 데이터 가져옴
+                    model: Post,
+                    attributes: ['id'],
+                }, {
+                    model: User,
+                    as: 'Followings',
+                    attributes: ['id'],
+                }, {
+                    model: User,
+                    as: 'Followers',
+                    attributes: ['id'],
+                }]
+            });
+
+            res.status(200).json(fullUserWithoutPassword);
+        } else {
+            res.status(200).json(null);
+        }
+
+    } catch (e) {
+        console.error(e);
+        next(e);
+    }
+
+
+
+});
+
+
 // login --> /user/login
 router.post('/login', isNotLoggedIn, async (req, res, next) => {
     /* 미들웨어 확장 */
@@ -60,7 +101,7 @@ router.post('/logout', isLoggedIn, async (req, res, next) => {
 
 
 // default 회원가입
-router.post('/',  isNotLoggedIn, async (req, res, next) => {
+router.post('/signup',  isNotLoggedIn, async (req, res, next) => {
     try {
         const exUser = await User.findOne({
             where: {

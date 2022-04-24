@@ -3,7 +3,7 @@ import {fork, all, put, call, delay, takeLatest} from "redux-saga/effects";
 import axios from "axios";
 import {
     FOLLOW_FAILURE,
-    FOLLOW_REQUEST, FOLLOW_SUCCESS,
+    FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS,
     LOG_IN_FAILURE,
     LOG_IN_REQUEST,
     LOG_IN_SUCCESS,
@@ -27,8 +27,9 @@ function logoutAPI() {
     return axios.post('/user/logout');
 }
 
+// 회원가입
 function signUpAPI(data) {
-    return axios.post('/user', data)
+    return axios.post('/user/signup', data)
 }
 
 function followAPI(data) {
@@ -37,6 +38,11 @@ function followAPI(data) {
 
 function unFollowAPI(data) {
     return axios.post('/api/unfollow', data)
+}
+
+// 내 정보 가져오기
+function loadMyInfoAPI() {
+    return axios.get('/user');// 쿠키에서 데이터 가져다 쓸거임 데이터 안넘거도 됨
 }
 
 /* gen */
@@ -128,6 +134,22 @@ function* unFollow(action) {
     }
 }
 
+function* loadMyInfo() {
+    try {
+        const result = yield call(loadMyInfoAPI);
+
+        yield put({
+            type: LOAD_MY_INFO_SUCCESS,
+            data: result.data
+        })
+    } catch (err) {
+        yield put({
+            type: LOAD_MY_INFO_FAILURE,
+            error: err.response.data,
+        })
+    }
+}
+
 
 // 이벤트 리스너 같은 역할
 function* watchLogIn() { // 문제: 한 번 밖에 호출 못함 ex) 로그인 -> 로그 아웃 -> 로그인 하려고 하면 이 이벤트 리스너가 사라짐
@@ -160,6 +182,10 @@ function* watchUnFollow() {
     yield takeLatest(UNFOLLOW_REQUEST, unFollow);
 }
 
+function* watchLoadMyInfo() {
+    yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
+}
+
 export default function* userSaga () {
 
     yield all([
@@ -168,6 +194,7 @@ export default function* userSaga () {
         fork(watchSignUp),
         fork(watchFollow),
         fork(watchUnFollow),
+        fork(watchLoadMyInfo),
 
     ])
 }

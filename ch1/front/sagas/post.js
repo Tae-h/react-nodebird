@@ -6,7 +6,8 @@ import {
     ADD_COMMENT_SUCCESS,
     ADD_POST_FAILURE,
     ADD_POST_REQUEST,
-    ADD_POST_SUCCESS, generateDummyPost, LOAD_POSTS_FAILURE,
+    ADD_POST_SUCCESS,
+    LOAD_POSTS_FAILURE,
     LOAD_POSTS_REQUEST,
     LOAD_POSTS_SUCCESS,
     REMOVE_POST_FAILURE,
@@ -29,7 +30,7 @@ function removePostAPI(data) {
 }
 
 function loadPostsAPI(data) {
-    return axios.get(`/api/post`, data);
+    return axios.get(`/posts`, data);
 }
 
 function* addPost(action) {
@@ -99,11 +100,11 @@ function* removePost(action) {
 
 function* loadPosts(action) {
     try {
-        yield delay(1000);
+        const result = yield call(loadPostsAPI, action.data);
 
         yield put({
             type: LOAD_POSTS_SUCCESS,
-            data: generateDummyPost(10),
+            data: result.data,
         })
     } catch (err) {
         yield put({

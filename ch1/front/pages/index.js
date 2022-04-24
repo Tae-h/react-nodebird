@@ -4,6 +4,7 @@ import PostForm from "../components/PostForm";
 import {useDispatch, useSelector} from "react-redux";
 import PostCard from "../components/PostCard";
 import {LOAD_POSTS_REQUEST} from "../reducers/post";
+import {LOAD_MY_INFO_REQUEST} from "../reducers/user";
 
 /*
 * Next 가 알아서 페이지 라우팅 까지 해줌!
@@ -15,7 +16,12 @@ const Home = () => {
     const { me } = useSelector((state) => state.user);
     const { mainPosts, hasMorePosts, loadPostsLoading } = useSelector((state) => state.post );
 
+
+
     useEffect(() => { // componentDidMount 효과
+        dispatch({
+           type: LOAD_MY_INFO_REQUEST,
+        });
         dispatch({
             type: LOAD_POSTS_REQUEST,
         });
@@ -29,7 +35,7 @@ const Home = () => {
             // clientHeight: 화면 보이는 길이
             // scrollHeight: 총 길이
             // scrollY + clientHeight = scrollHeight
-            console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
+            //console.log(window.scrollY, document.documentElement.clientHeight, document.documentElement.scrollHeight);
 
             if ( window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300 ) {
                 if ( hasMorePosts && !loadPostsLoading) {

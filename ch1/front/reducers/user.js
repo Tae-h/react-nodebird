@@ -28,6 +28,10 @@ export const initialState = {
     unFollowLoading: false,
     unFollowDone: false,
     unFollowError: null,
+
+    loadMyInfoLoading: false, // 내 정보
+    loadMyInfoDone: false,
+    loadMyInfoError: null,
 };
 
 /* thunk 이렇게 쓰는게 끝임 */
@@ -71,6 +75,10 @@ export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';// 본인 게시글 추가
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';// 본인 게시글 삭제
 
+export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST'; // 내정보 가져옴
+export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
+export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
+
 export const loginRequestAction  = (data) => {
     return {
         type: LOG_IN_REQUEST,
@@ -103,6 +111,24 @@ const dummyUser = (data) => ({
 const reducer = (state = initialState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            case LOAD_MY_INFO_REQUEST: {
+                draft.loadMyInfoLoading = true;
+                draft.loadMyInfoError = null;
+                draft.loadMyInfoDone = false;
+                break;
+            }
+            case LOAD_MY_INFO_SUCCESS: {
+                draft.loadMyInfoLoading = false;
+                draft.loadMyInfoDone = true;
+                draft.me = action.data;
+                break;
+            }
+            case LOAD_MY_INFO_FAILURE: {
+                draft.loadMyInfoDone = false;
+                draft.loadMyInfoLoading = false;
+                draft.loadMyInfoError = action.error;
+                break;
+            }
             /* 필로우 */
             case FOLLOW_REQUEST: {
                 draft.followLoading = true;
