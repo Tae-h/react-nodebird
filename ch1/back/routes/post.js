@@ -66,7 +66,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
             }],
         })
 
-        res.status(201).json(fullComment).send('comment created successfully');
+        res.status(201).json(fullComment);
     } catch (e) {
         console.error(e);
         next(e);
