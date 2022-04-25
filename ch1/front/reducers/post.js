@@ -5,7 +5,7 @@ import faker from 'faker';
 
 export const initialState = {
     mainPosts: [ // 더미 데이터
-        {
+        /*{
             id: 1,
             User: {id: 1, nickname: 'Tae-h'},
             content: '테스트 #해시태그 #해시태그2 ',
@@ -59,7 +59,7 @@ export const initialState = {
                 {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러4-1'}, content: '코멘트 4-1'},
                 {id: shortid.generate(),User: {id: shortid.generate(),nickname: '댓글러4-2'}, content: '코멘트 4-2'}
             ]
-        },
+        },*/
     ],
     imagePaths: [], // <-- 이미지 업로드시 경로 저장
 

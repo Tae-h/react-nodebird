@@ -4,8 +4,8 @@ const { Post, Image, Comment, User, Hashtag } = require('../models');
 
 const router = express.Router();
 
-router.post('/', async (req, res, next) => {
-
+router.get('/', async (req, res, next) => {
+    console.log('posts!!!')
     try {
         const where = {};
 

@@ -32,7 +32,7 @@ router.post('/', isLoggedIn, async (req, res, next) => {
             }]
         })
 
-        res.status(201).json(fullPost).send('posts created successfully');
+        res.status(201).json(fullPost);
     } catch (e) {
         console.error(e);
         next(e);
@@ -53,7 +53,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
         }
 
         const comment = await Comment.create({
-            PostId: req.params.postId, // req.body.postId 도 가능
+            PostId: parseInt(req.params.postId, 10), // req.body.postId 도 가능
             content: req.body.content,
             UserId: req.user.userId,
         });
