@@ -38,7 +38,7 @@ const PostCard = ({ post }) => {
 
     const onToggleComment = useCallback((e) => {
         setCommentFormOpened((prev) => !prev);
-    }, [commentFormOpened]);
+    }, []);
 
     const onRemovePost = useCallback(() => {
         dispatch({
@@ -99,8 +99,8 @@ const PostCard = ({ post }) => {
                             renderItem={(item) => (
                                 <li>
                                     <Comment
-                                        avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                                         author={item.User.nickname}
+                                        avatar={<Avatar>{item.User.nickname[0]}</Avatar>}
                                         content={item.content}
                                     />
                                 </li>

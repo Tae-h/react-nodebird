@@ -1,5 +1,6 @@
 const express = require('express');
 const { isLoggedIn } = require('./middlewares');
+const { Op } = require('sequelize');
 const { Post, Image, Comment, User, Hashtag } = require('../models');
 
 const router = express.Router();
@@ -16,7 +17,6 @@ router.get('/', async (req, res, next) => {
         const posts = await Post.findAll({
             where,
             limit: 10,
-            //offset: 0, // 1~ 10 게시물, 10--> 11 ~ 20 게시 이방식은 잘 안씀
             order: [
                 ['createdAt', 'DESC'],
                 [Comment, 'createdAt', 'DESC'],
@@ -37,7 +37,7 @@ router.get('/', async (req, res, next) => {
             }, {
                 model: User, // 좋아요 누른 사람
                 as: 'Likers',
-                attributes: ['id'],
+                attributes: ['id', 'nickname'],
             }, {
                 model: Post,
                 as: 'Retweet',

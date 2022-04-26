@@ -55,7 +55,7 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {
         const comment = await Comment.create({
             PostId: parseInt(req.params.postId, 10), // req.body.postId 도 가능
             content: req.body.content,
-            UserId: req.user.userId,
+            UserId: req.user.id,
         });
 
         const fullComment = await Comment.findOne({
