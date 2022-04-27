@@ -80,6 +80,18 @@ export const initialState = {
     removePostError: null,
 
     hasMorePosts: true, // true 일때만 가져올거임!
+
+    likePostLoading: false,
+    likePostDone: false,
+    likePostError: null,
+
+    unlikePostLoading: false,
+    unlikePostDone: false,
+    unlikePostError: null,
+
+    deletePostLoading: false,
+    deletePostDone: false,
+    deletePostError: null,
 };
 
 const dummyData = (data) => ({
@@ -139,6 +151,16 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
+export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
+export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
+export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
+
+export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
+export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
+export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
+
+
 export const addPostAction = (data) => {
     return {
         type: ADD_POST_REQUEST,
@@ -162,6 +184,40 @@ const reducer = (state = initialState, action) => {
         // state 기 draft (다음 상태) 로 변함 state --> draft 불변성 보장
 
         switch (action.type) {
+            case LIKE_POST_REQUEST:
+                draft.likePostLoading = true;
+                draft.likePostDone = false;
+                draft.likePostError = null;
+                break;
+            case LIKE_POST_SUCCESS: {
+                const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+                post.Likers.push({ id: action.data.UserId });
+                draft.likePostLoading = false;
+                draft.likePostDone = true;
+                break;
+            }
+            case LIKE_POST_FAILURE:
+                draft.likePostLoading = false;
+                draft.likePostError = action.error;
+                break;
+
+            case UNLIKE_POST_REQUEST:
+                draft.unlikePostLoading = true;
+                draft.unlikePostDone = false;
+                draft.unlikePostError = null;
+                break;
+            case UNLIKE_POST_SUCCESS: {
+                const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
+                post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
+                draft.unlikePostLoading = false;
+                draft.unlikePostDone = true;
+                break;
+            }
+            case UNLIKE_POST_FAILURE:
+                draft.unlikePostLoading = false;
+                draft.unlikePostError = action.error;
+                break;
+
             case LOAD_POSTS_REQUEST: {
                 draft.loadPostsLoading = true;
                 draft.loadPostsDone = false;
@@ -172,7 +228,7 @@ const reducer = (state = initialState, action) => {
                 draft.loadPostsLoading = false;
                 draft.loadPostsDone = true;
                 draft.mainPosts = action.data.concat(draft.mainPosts);
-                draft.hasMorePosts = draft.mainPosts.length < 50;
+                draft.hasMorePosts = draft.mainPosts.length === 10;
                 break;
             }
             case LOAD_POSTS_FAILURE: {
@@ -243,7 +299,7 @@ const reducer = (state = initialState, action) => {
             case REMOVE_POST_SUCCESS: {
                 draft.removePostLoading = false;
                 draft.removePostDone = true;
-                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data); // data 가 아이디
+                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId); // data 가 아이디
                 break;
             }
             case REMOVE_POST_FAILURE: {

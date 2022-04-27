@@ -2,6 +2,8 @@ import {fork, all, put, call, delay, takeLatest} from "redux-saga/effects";
 //import { takeLatest} from "redux-saga";
 import axios from "axios";
 import {
+    CHANGE_NICKNAME_FAILURE,
+    CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS,
     FOLLOW_FAILURE,
     FOLLOW_REQUEST, FOLLOW_SUCCESS, LOAD_MY_INFO_FAILURE, LOAD_MY_INFO_REQUEST, LOAD_MY_INFO_SUCCESS,
     LOG_IN_FAILURE,
@@ -43,6 +45,10 @@ function unFollowAPI(data) {
 // 내 정보 가져오기
 function loadMyInfoAPI() {
     return axios.get('/user');// 쿠키에서 데이터 가져다 쓸거임 데이터 안넘거도 됨
+}
+
+function changeNicknameAPI(data) {
+    return axios.patch('/user/nickname', {nickname: data});
 }
 
 /* gen */
@@ -150,6 +156,22 @@ function* loadMyInfo() {
     }
 }
 
+function* changeNickname(action) {
+    try {
+        const result = yield call(changeNicknameAPI, action.data);
+
+        yield put({
+            type: CHANGE_NICKNAME_SUCCESS,
+            data: result.data
+        })
+    } catch (err) {
+        yield put({
+            type: CHANGE_NICKNAME_FAILURE,
+            error: err.response.data,
+        })
+    }
+}
+
 
 // 이벤트 리스너 같은 역할
 function* watchLogIn() { // 문제: 한 번 밖에 호출 못함 ex) 로그인 -> 로그 아웃 -> 로그인 하려고 하면 이 이벤트 리스너가 사라짐
@@ -186,6 +208,10 @@ function* watchLoadMyInfo() {
     yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 
+function* watchChangeNickname() {
+    yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
+}
+
 export default function* userSaga () {
 
     yield all([
@@ -195,6 +221,7 @@ export default function* userSaga () {
         fork(watchFollow),
         fork(watchUnFollow),
         fork(watchLoadMyInfo),
+        fork(watchChangeNickname),
 
     ])
 }

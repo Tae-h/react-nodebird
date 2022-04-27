@@ -79,6 +79,8 @@ export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST'; // 내정보 가져�
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
 
+
+
 export const loginRequestAction  = (data) => {
     return {
         type: LOG_IN_REQUEST,
@@ -228,8 +230,10 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case CHANGE_NICKNAME_SUCCESS: {
+                alert('닉네임이 변경 되었습니다.');
                 draft.changeNicknameLoading = false;
                 draft.changeNicknameDone = true;
+                draft.me.nickname = action.data.nickname;
                 break;
             }
             case CHANGE_NICKNAME_FAILURE: {

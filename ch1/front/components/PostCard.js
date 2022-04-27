@@ -7,7 +7,7 @@ import PostImages from "./PostImages";
 import {useCallback, useEffect, useState} from "react";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
-import {REMOVE_POST_REQUEST} from "../reducers/post";
+import {LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST} from "../reducers/post";
 import FollowButton from "./FollowButton";
 
 
@@ -19,22 +19,31 @@ const PostCard = ({ post }) => {
 
     const { addPostDone, mainPosts, removePostLoading} = useSelector((state) => state.post);
 
-    const [liked, setLiked] = useState(false);
+    //const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
 
-    /*useEffect(() => {
-        /!* 포스트 추가 완료 되면  *!/
-        if ( addPostDone ) {
-
+    const onLike = useCallback((e) => {
+        if (!id) {
+            return alert('로그인이 필요합니다.');
         }
-    }, [addPostDone]);*/
 
+        dispatch({
+            type: LIKE_POST_REQUEST,
+            data: post.id,
+        })
+    }, [id]);
 
+    const onUnlike = useCallback((e) => {
+        if (!id) {
+            return alert('로그인이 필요합니다.');
+        }
 
-    const onToggleLike = useCallback((e) => {
-        setLiked((prev) => !prev);
-    }, [liked])
+        dispatch({
+            type: UNLIKE_POST_REQUEST,
+            data: post.id,
+        })
+    }, [id]);
 
     const onToggleComment = useCallback((e) => {
         setCommentFormOpened((prev) => !prev);
@@ -47,6 +56,9 @@ const PostCard = ({ post }) => {
         });
     }, []);
 
+
+    const liked = post.Likers.find((v) => v.id === id);
+
     return (
         <>
             <div style={{ marginBottom: 20 }}>
@@ -54,10 +66,8 @@ const PostCard = ({ post }) => {
                     cover={post.Images[0] && <PostImages images={post.Images}/>}
                     actions={[ /* 배열안에 jsx 를 넣을 때는 항상 key 값을 넣어줘야 함 */
                         <RetweetOutlined key={"retweet"}/>,
-                        liked ? <HeartTwoTone  twoToneColor={"#eb2f96"} key={"heart"}
-                                    onClick={onToggleLike}
-                                />
-                                : <HeartOutlined key={"heart"} onClick={onToggleLike}/>
+                        liked ? <HeartTwoTone  twoToneColor={"#eb2f96"} key={"heart"} onClick={onUnlike}/>
+                                : <HeartOutlined key={"heart"} onClick={onLike}/>
                         ,
                         <MessageOutlined key={"comment"} onClick={onToggleComment}/>,
                         <Popover key="more" content={[
@@ -113,16 +123,20 @@ const PostCard = ({ post }) => {
     )
 }
 
+
+
 PostCard.propTypes = {
-    //post: PropTypes.object.isRequired,
     post: PropTypes.shape({
         id: PropTypes.number,
         User: PropTypes.object,
         content: PropTypes.string,
-        createAt: PropTypes.string,
+        createdAt: PropTypes.string,
         Comments: PropTypes.arrayOf(PropTypes.object),
-        Images: PropTypes.arrayOf(PropTypes.object)
+        Images: PropTypes.arrayOf(PropTypes.object),
+        Likers: PropTypes.arrayOf(PropTypes.object),
+        RetweetId: PropTypes.number,
+        Retweet: PropTypes.objectOf(PropTypes.any),
     }).isRequired,
-}
+};
 
 export default PostCard;

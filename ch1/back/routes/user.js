@@ -129,6 +129,21 @@ router.post('/signup',  isNotLoggedIn, async (req, res, next) => {
 
 });
 
+/* 닉네임 수정 */
+router.patch('/nickname', isLoggedIn, async (req, res, next) => {
+    try {
+        await User.update({
+            nickname: req.body.nickname,
+        }, {
+            where: { id: req.user.id },
+        });
+        console.log("변경된 닉네임!! ", req.body.nickname);
+        res.status(200).json({ nickname: req.body.nickname });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }
+});
 
 
 module.exports = router;
