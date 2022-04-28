@@ -78,7 +78,6 @@ function removeFollowerAPI(data) {
 
 /* gen */
 function* logIn(action) {
-    console.log('logIn', action);
     try {
         console.log(action)
         const result = yield call(loginAPI, action.data); // 나머지는 매개 변
