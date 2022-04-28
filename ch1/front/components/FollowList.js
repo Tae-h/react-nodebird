@@ -1,9 +1,27 @@
-import {memo} from "react";
+import {memo, useCallback} from "react";
 import {Button, Card, List} from 'antd';
 import {StopOutlined} from "@ant-design/icons";
 import PropTypes from 'prop-types';
+import {useDispatch} from "react-redux";
+import {REMOVE_FOLLOWER_REQUEST, UNFOLLOW_REQUEST} from "../reducers/user";
 
 const FollowList = memo(({header, data}) => {
+
+    const dispatch = useDispatch();
+
+    const onCancel = (id) => () => { // 고차 함수 --> 반복문에서 사용시 유용하다
+        if (header === '팔로잉') {
+            dispatch({
+                type: UNFOLLOW_REQUEST,
+                data: id,
+            });
+        }
+        dispatch({
+            type: REMOVE_FOLLOWER_REQUEST,
+            data: id,
+        });
+    };
+
 
     return (
         <>
@@ -17,10 +35,11 @@ const FollowList = memo(({header, data}) => {
                 dataSource={data}
                 renderItem={(item) => (
                     <List.Item style={{ marginTop: 20 }}>
-                        <Card actions={[<StopOutlined key="stop"/>]}>
-                            <Card.Meta descriptions={ item.nickname }/>
+                        <Card actions={[<StopOutlined key="stop" onClick={onCancel(item.id)}/>]}>
+                            <Card.Meta description={ item.nickname } />
                         </Card>
                     </List.Item>
+
                 )}
             />
         </>
