@@ -17,10 +17,12 @@ const PostCard = ({ post }) => {
     const { me } = useSelector((state) => state.user);
     const id = me?.id;
 
-    const { addPostDone, mainPosts, removePostLoading} = useSelector((state) => state.post);
+    const { addPostDone, mainPosts, removePostLoading, retweetError} = useSelector((state) => state.post);
 
     //const [liked, setLiked] = useState(false);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
+
+
 
 
     const onLike = useCallback((e) => {
@@ -28,7 +30,7 @@ const PostCard = ({ post }) => {
             return alert('로그인이 필요합니다.');
         }
 
-        dispatch({
+        return dispatch({
             type: LIKE_POST_REQUEST,
             data: post.id,
         })
@@ -39,7 +41,7 @@ const PostCard = ({ post }) => {
             return alert('로그인이 필요합니다.');
         }
 
-        dispatch({
+        return dispatch({
             type: UNLIKE_POST_REQUEST,
             data: post.id,
         })
@@ -50,7 +52,10 @@ const PostCard = ({ post }) => {
     }, []);
 
     const onRemovePost = useCallback(() => {
-        dispatch({
+        if (!id) {
+            return alert('로그인이 필요합니다.');
+        }
+        return dispatch({
             type: REMOVE_POST_REQUEST,
             data: post.id
         });
@@ -100,15 +105,37 @@ const PostCard = ({ post }) => {
                             <EllipsisOutlined />
                         </Popover>
                     ]}
+                    title={post.RetweetId ? `${post.User.nickname}님이 리트윗하셨습니다.` : null}
                     extra={id && <FollowButton post={post}/>}
                 >
-                    <Card.Meta
-                        avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-                        title={post.User.nickname}
-                        description={ <PostCardContent postData={post.content} />}
-                    />
+                    {post.RetweetId && post.Retweet
+                        ? (
+                            <Card
+                                cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
+                            >
+                                {/*<span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD.')}</span>*/}
+                                <Card.Meta
+                                    avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
+                                    title={post.Retweet.User.nickname}
+                                    description={<PostCardContent postData={post.Retweet.content} />}
+                                />
+                            </Card>
+                        )
+                        : (
+                            <>
+                                {/*<span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD.')}</span>*/}
+                                <Card.Meta
+                                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                                    title={post.User.nickname}
+                                    description={<PostCardContent postData={post.content} />}
+                                />
+                            </>
+                        )
+                    }
 
                 </Card>
+
+
                 {commentFormOpened && (
                     <div>
                         <CommentForm post={post}/> {/* 게시글의 아이디가 필요해서 넘김 */}
