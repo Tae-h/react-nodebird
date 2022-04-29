@@ -1,7 +1,7 @@
 import {Button, Form, Input} from "antd";
 import {useCallback, useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import { addPostAction} from "../reducers/post";
+import {ADD_POST_REQUEST, addPostAction, REMOVE_IMAGE, UPLOAD_IMAGES_REQUEST} from "../reducers/post";
 
 const PostForm = () => {
 
@@ -17,9 +17,24 @@ const PostForm = () => {
     }, [addPostDone]);
 
 
+
     const onSubmit = useCallback(() => {
-        dispatch( addPostAction(text) );
-    }, [text]);
+        //dispatch( addPostAction(text) );
+        if (!text || !text.trim()) {
+            return alert('게시글을 작성하세요.');
+        }
+        const formData = new FormData();
+
+        imagePaths.forEach((p) => {
+            formData.append('image', p);
+        });
+
+        formData.append('content', text);
+        return dispatch({
+            type: ADD_POST_REQUEST,
+            data: formData,
+        });
+    }, [text, imagePaths]);
 
 
     const onChangeText = useCallback((e) => {
@@ -31,6 +46,24 @@ const PostForm = () => {
     const onClickImageFileUpload = useCallback(() => {
         imageFileInput.current.click();
     }, [imageFileInput.current]);
+
+    const onChangeImages = useCallback((e) => {
+        const imageFormData = new FormData();
+        [].forEach.call(e.target.files, (f) => {
+            imageFormData.append('image', f);
+        });
+        dispatch({
+            type: UPLOAD_IMAGES_REQUEST,
+            data: imageFormData,
+        });
+    }, []);
+
+    const onRemoveImage = useCallback((index) => () => {
+        dispatch({
+            type: REMOVE_IMAGE,
+            data: index,
+        });
+    }, []);
 
     return (
         <>
@@ -45,16 +78,16 @@ const PostForm = () => {
                     placeholder="무슨일이 있었나요?"
                 />
                 <div>
-                    <input type="file" multiple hidden ref={imageFileInput}/>
-                    <Button onClick={onClickImageFileUpload}>이미지 업로드</Button>
+                    <input type="file" name={'image'} multiple hidden ref={ imageFileInput } onChange={onChangeImages}/>
+                    <Button onClick={ onClickImageFileUpload }>이미지 업로드</Button>
                     <Button type="primary" style={{ float: 'right' }} htmlType={"submit"}>짹!!</Button>
                 </div>
                 <div>
-                    { imagePaths.map((v) => (
+                    { imagePaths.map((v, index) => (
                         <div key={v} style={{ display: 'inline-block' }}>
-                            <img src={v} style={{ width: '200px' }} alt={v}/>
+                            <img src={`http://localhost:3060/${v}`} style={{ width: '200px' }} alt={v} />
                             <div>
-                                <Button>제거</Button>
+                                <Button onClick={ onRemoveImage(index) }>제거</Button>
                             </div>
                         </div>
                     ))}

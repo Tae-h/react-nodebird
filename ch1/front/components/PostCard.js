@@ -7,7 +7,7 @@ import PostImages from "./PostImages";
 import {useCallback, useEffect, useState} from "react";
 import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
-import {LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST} from "../reducers/post";
+import {LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST} from "../reducers/post";
 import FollowButton from "./FollowButton";
 
 
@@ -56,6 +56,16 @@ const PostCard = ({ post }) => {
         });
     }, []);
 
+    const onRetweet = useCallback(() => {
+        if ( !id ) {
+            return alert('로그인이 필요합니다.');
+        }
+
+        return dispatch({
+            type: RETWEET_REQUEST,
+            data: post.id,
+        });
+    }, [id]);
 
     const liked = post.Likers.find((v) => v.id === id);
 
@@ -65,8 +75,8 @@ const PostCard = ({ post }) => {
                 <Card
                     cover={post.Images[0] && <PostImages images={post.Images}/>}
                     actions={[ /* 배열안에 jsx 를 넣을 때는 항상 key 값을 넣어줘야 함 */
-                        <RetweetOutlined key={"retweet"}/>,
-                        liked ? <HeartTwoTone  twoToneColor={"#eb2f96"} key={"heart"} onClick={onUnlike}/>
+                        <RetweetOutlined key={"retweet"} onClick={ onRetweet }/>,
+                        liked ? <HeartTwoTone  twoToneColor={"#eb2f96"} key={"heart"} onClick={ onUnlike }/>
                                 : <HeartOutlined key={"heart"} onClick={onLike}/>
                         ,
                         <MessageOutlined key={"comment"} onClick={onToggleComment}/>,

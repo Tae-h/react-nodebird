@@ -30,7 +30,7 @@ const ImagesZoom = memo(({ images, onClose }) => {
                         >
                             { images?.map((v) => (
                                 <ImageWrapper key={v.src}>
-                                    <img src={v.src} alt={v.alt}/>
+                                    <img src={`http://localhost:3060/${v.src}`} alt={v.alt}/>
                                 </ImageWrapper>
                             ))}
 

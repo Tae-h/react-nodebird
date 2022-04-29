@@ -30,6 +30,7 @@ const postsRouter = require('./routes/posts');
 const userRouter = require('./routes/user');
 const db = require('./models');
 const passportConfig = require('./passport');
+const path = require("path");
 dotenv.config();
 const app = express();
 
@@ -63,8 +64,9 @@ app.use(cors({
     origin: true,
     credentials: true, // true: 쿠키까지 같이 전달
 })); // 모든 요청에 res.setHeader('Access-Control-Allow-Origin', '*'); 를 넣어줌
-app.use(express.json());
-app.use(express.urlencoded( {extended: true} ));
+app.use('/', express.static(path.join(__dirname, 'uploads'))); // os 별 경로 구분자 때문에 문자열 합치는거 안씀
+app.use(express.json()); // axios 로 데이터 전소이 json 형태로 받겠다~
+app.use(express.urlencoded( {extended: true} )); // 일반 폼 형태로 보낼시
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
     saveUninitialized: false,
