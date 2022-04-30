@@ -81,7 +81,6 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
     // context 안에 store 들어 있음~
 
-    console.log('getServerSideProps start');
     console.log(context.req.headers);
 
     /**
@@ -105,7 +104,6 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
     });
 
     context.store.dispatch(END);
-    console.log('getServerSideProps end');
     await context.store.sagaTask.toPromise();
 });
 

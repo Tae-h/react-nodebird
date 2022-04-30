@@ -307,7 +307,7 @@ function* watchLoadMyInfo() {
 }
 
 function* watchLoadUser() {
-    yield takeLatest(LOAD_USER_REQUEST, loadUser());
+    yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
 
 function* watchChangeNickname() {
