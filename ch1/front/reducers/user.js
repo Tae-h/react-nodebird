@@ -2,6 +2,7 @@ import produce from "immer"
 
 export const initialState = {
     me: null, // 요거 데이터 형식이 뭐지....
+    userInfo: null,
     signUpData: {},
     loginData: {},
 
@@ -32,6 +33,10 @@ export const initialState = {
     loadMyInfoLoading: false, // 내 정보
     loadMyInfoDone: false,
     loadMyInfoError: null,
+
+    loadUserLoading: false, // 유저 정보 가져오기 시도중
+    loadUserDone: false,
+    loadUserError: null,
 
     loadFollowingsLoading: false,
     loadFollowingsDone: false,
@@ -90,6 +95,10 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';// 본인 게시글 삭제
 export const LOAD_MY_INFO_REQUEST = 'LOAD_MY_INFO_REQUEST'; // 내정보 가져옴
 export const LOAD_MY_INFO_SUCCESS = 'LOAD_MY_INFO_SUCCESS';
 export const LOAD_MY_INFO_FAILURE = 'LOAD_MY_INFO_FAILURE';
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
 export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
 export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
@@ -197,10 +206,27 @@ const reducer = (state = initialState, action) => {
                 draft.loadMyInfoError = action.error;
                 break;
             }
+
+            case LOAD_USER_REQUEST:
+                draft.loadUserLoading = true;
+                draft.loadUserError = null;
+                draft.loadUserDone = false;
+                break;
+            case LOAD_USER_SUCCESS:
+                draft.loadUserLoading = false;
+                draft.userInfo = action.data;
+                draft.loadUserDone = true;
+                break;
+            case LOAD_USER_FAILURE:
+                draft.loadUserLoading = false;
+                draft.loadUserError = action.error;
+                break;
+
             /* 필로우 */
             case FOLLOW_REQUEST: {
                 draft.followLoading = true;
                 draft.followError = null;
+                draft.followDone = false;
                 draft.followDone = false;
                 break;
             }
