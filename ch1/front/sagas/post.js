@@ -1,5 +1,5 @@
 import axios from "axios";
-import {all, delay, call, fork, put, takeLatest, throttle} from "redux-saga/effects";
+import {all, call, fork, put, takeLatest, throttle} from "redux-saga/effects";
 import {
     ADD_COMMENT_FAILURE,
     ADD_COMMENT_REQUEST,
@@ -9,7 +9,7 @@ import {
     ADD_POST_SUCCESS,
     LIKE_POST_FAILURE,
     LIKE_POST_REQUEST,
-    LIKE_POST_SUCCESS,
+    LIKE_POST_SUCCESS, LOAD_POST_FAILURE, LOAD_POST_REQUEST, LOAD_POST_SUCCESS,
     LOAD_POSTS_FAILURE,
     LOAD_POSTS_REQUEST,
     LOAD_POSTS_SUCCESS,
@@ -38,8 +38,13 @@ function removePostAPI(data) {
 }
 
 function loadPostsAPI(lastId) {
-    return axios.get(`/posts?lastId=${lastId}`);
+    return axios.get(`/posts?lastId=${lastId || 0}`);
 }
+
+function loadPostAPI(data) {
+    return axios.get(`/post/${data}`);
+}
+
 
 function likePostAPI(data) {
     return axios.patch(`/post/${data}/like`);
@@ -102,7 +107,7 @@ function* addComment(action) {
 function* removePost(action) {
     try {
         const result = yield call(removePostAPI, action.data);
-        const id = shortid.generate();
+        //const id = shortid.generate();
 
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: REMOVE_POST_SUCCESS,
@@ -132,6 +137,22 @@ function* loadPosts(action) {
     } catch (err) {
         yield put({
             type: LOAD_POSTS_FAILURE,
+            error: err.response.data
+        });
+    }
+}
+
+function* loadPost(action) {
+    try {
+        const result = yield call(loadPostAPI, action.data);
+
+        yield put({
+            type: LOAD_POST_SUCCESS,
+            data: result.data,
+        })
+    } catch (err) {
+        yield put({
+            type: LOAD_POST_FAILURE,
             error: err.response.data
         });
     }
@@ -219,6 +240,10 @@ function* watchLoadPosts() {
     yield throttle(2000, LOAD_POSTS_REQUEST, loadPosts);
 }
 
+function* watchLoadPost() {
+    yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 function* watchLikePost() {
     yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -245,6 +270,7 @@ export default function* postSaga () {
         fork(watchAddComment),
         fork(watchRemoveComment),
         fork(watchLoadPosts),
+        fork(watchLoadPost),
         fork(watchLikePost),
         fork(watchUnlikePost),
         fork(watchRemovePost),
