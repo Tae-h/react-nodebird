@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import Link from 'next/link'; // 넥스트에서 지원
 import { Menu, Input, Row, Col } from 'antd';
-import {memo, useState} from "react";
+import {memo, useCallback, useState} from "react";
 import UserProfile from "./UserProfile";
 import LoginForm from "./LoginForm";
 import styled, {createGlobalStyle} from "styled-components";
-import {useSelector} from "react-redux"; // 리액트랑 리덕스랑 연결
+import {useSelector} from "react-redux";
+import useInput from "../hooks/useInput";
+import Router from "next/router"; // 리액트랑 리덕스랑 연결
 
 /* styled-components 로 빼면 리렌더링이 되지 않음 */
 const SearchInput = styled(Input.Search)`
@@ -30,6 +32,11 @@ const AppLayout = memo(( { children } ) => {
     //const [isLoggedIn, setIsLoggedIn] = useState(false); //<-- 이제 리덕스 중앙
     //const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
     const { loginDone, me } = useSelector((state) => state.user); // 취향 차이
+    const [searchInput, onChangeSearchInput] = useInput('');
+
+    const onSearch = useCallback(() => {
+        Router.push(`/hashtag/${searchInput}`);
+    }, [searchInput]);
 
     return (
         <div>
@@ -42,7 +49,12 @@ const AppLayout = memo(( { children } ) => {
                     <Link href="/profile"><a>프로필</a></Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <SearchInput enterButton />
+                    <SearchInput
+                        enterButton
+                        value={searchInput}
+                        onChange={onChangeSearchInput}
+                        onSearch={onSearch}
+                    />
                 </Menu.Item>
                 <Menu.Item>
                     <Link href="/signup"><a>회원가입</a></Link>

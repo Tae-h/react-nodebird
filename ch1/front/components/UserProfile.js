@@ -2,6 +2,7 @@ import {Avatar, Button, Card} from 'antd';
 import {useCallback} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import { logoutRequestAction} from "../reducers/user";
+import Link from 'next/link';
 
 const UserProfile = () => {
 
@@ -17,13 +18,31 @@ const UserProfile = () => {
         <>
             <Card
                 actions={[
-                    <div key="twit" >짹짹<br/>{me?.Posts?.length}</div>,
-                    <div key="followings" >팔로잉<br/>{me && me.Followings?.length }</div>,
-                    <div key="followers" >팔로워<br/>{me && me.Followers?.length }</div>
+                    <div key="twit" >
+                        <Link href={`/user/${me.id}`}>
+                            <a>짹짹<br/>{me?.Posts?.length}</a>
+                        </Link>
+                    </div>,
+                    <div key="followings" >
+                        <Link href="/profile">
+                          <a>팔로잉<br/>{me && me.Followings?.length }</a>
+                        </Link>
+                    </div>,
+                    <div key="followers" >
+                        <Link href="/profile">
+                            <a>팔로워<br/>{me && me.Followers?.length }</a>
+                        </Link>
+                    </div>
                 ]}
             >
                 <Card.Meta
-                    avatar={<Avatar>{me?.nickname[0]}</Avatar>}
+                    avatar={
+                        <Link href={`/user/${me.id}`} prefetch={false}>
+                            <a>
+                                <Avatar>{me?.nickname[0]}</Avatar>
+                            </a>
+                        </Link>
+                    }
                     title={me?.nickname}
                 />
                 <Button onClick={ onLogout } loading={ logoutLoading }>로그아웃</Button>

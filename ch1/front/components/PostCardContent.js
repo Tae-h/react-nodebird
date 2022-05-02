@@ -11,7 +11,7 @@ const PostCardContent = memo(({postData}) => {
                 {/* 해시태그 */}
                 { postData.split(/(#[^\s#]+)/g).map((v, i) => {
                     if ( v.match(/(#[^\s#]+)/g) ) {
-                        return <Link href={`hashtag/${v.slice(1)}`} key={i}><a>{v}</a></Link>
+                        return <Link href={`/hashtag/${v.slice(1)}`} key={i}><a>{v}</a></Link>
                     }
 
                     return v;

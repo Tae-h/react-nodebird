@@ -17,6 +17,7 @@
     "dotenv": "^16.0.0",
     "faker": "^4.1.0",
     "immer": "^9.0.12",
+    "moment": "^2.29.3",
     "next": "^9.5.5",
     "next-redux-wrapper": "^6.0.2",
     "prop-types": "^15.8.1",

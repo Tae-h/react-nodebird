@@ -9,7 +9,11 @@ import CommentForm from "./CommentForm";
 import PostCardContent from "./PostCardContent";
 import {LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST} from "../reducers/post";
 import FollowButton from "./FollowButton";
+import Link from "next/link";
+import moment from 'moment';
 
+moment.locale('ko'); // 한글 설정
+// 참조 momentjs.com
 
 const PostCard = ({ post }) => {
 
@@ -113,7 +117,7 @@ const PostCard = ({ post }) => {
                             <Card
                                 cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
                             >
-                                {/*<span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD.')}</span>*/}
+                                <span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</span>
                                 <Card.Meta
                                     avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
                                     title={post.Retweet.User.nickname}
@@ -123,9 +127,15 @@ const PostCard = ({ post }) => {
                         )
                         : (
                             <>
-                                {/*<span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD.')}</span>*/}
+                                <span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY.MM.DD')}</span>
                                 <Card.Meta
-                                    avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                                    avatar={
+                                        <Link href={`/user/${post.User.id}`}>
+                                            <a>
+                                                <Avatar>{post.User.nickname[0]}</Avatar>
+                                            </a>
+                                        </Link>
+                                    }
                                     title={post.User.nickname}
                                     description={<PostCardContent postData={post.content} />}
                                 />

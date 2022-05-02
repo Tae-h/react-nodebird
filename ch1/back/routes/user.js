@@ -76,7 +76,7 @@ router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/f
 
         const followings = await user.getFollowings({
             attributes: ['id', 'nickname'],
-            //limit: parseInt(req.query.limit, 10),
+            limit: parseInt(req.query.limit, 10),
         });
 
         res.status(200).json(followings);

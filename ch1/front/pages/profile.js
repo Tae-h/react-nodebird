@@ -5,7 +5,7 @@ import FollowList from "../components/FollowList";
 import {useDispatch, useSelector} from "react-redux";
 import {useCallback, useEffect, useState} from "react";
 import Router from "next/router";
-import useSWR from 'swr';
+import useSWR  from 'swr';
 import {LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST, LOAD_MY_INFO_REQUEST} from "../reducers/user";
 import wrapper from "../store/configureStore";
 import axios from "axios";
@@ -67,8 +67,8 @@ const Profile = () => {
             <AppLayout>
                 <NicknameEditForm />
 
-                <FollowList header="팔로잉" data={followingsData} onClickMore={loadMoreFollowings} loading={!followingError && !followingsData} />
-                <FollowList header="팔로워" data={followersData} onClickMore={loadMoreFollowers} loading={!followerError && !followersData} />
+                <FollowList header="팔로잉" data={ followingsData } onClickMore={loadMoreFollowings} loading={!followingError && !followingsData} />
+                <FollowList header="팔로워" data={ followersData } onClickMore={loadMoreFollowers} loading={!followerError && !followersData} />
             </AppLayout>
         </>
     );
