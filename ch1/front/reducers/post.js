@@ -1,6 +1,6 @@
 import shortid from 'shortid';
 import {ADD_POST_TO_ME} from "./user";
-import produce from "immer";
+import produce from "../util/produce";
 import faker from 'faker';
 
 export const initialState = {

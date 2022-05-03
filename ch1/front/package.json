@@ -4,16 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
-    "build": "next build"
+    "dev": "next -p 3000",
+    "build": "cross-env ANALYZE=true NODE_ENV=production next build",
+    "start": "cross-env NODE_ENV=production next start -p 3000"
   },
   "author": "Tae-h",
   "license": "ISC",
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@next/bundle-analyzer": "^12.1.5",
     "antd": "^4.19.1",
     "axios": "^0.26.1",
     "babel-plugin-styled-components": "^2.0.7",
+    "compression-webpack-plugin": "^9.2.0",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.0",
     "faker": "^4.1.0",
     "immer": "^9.0.12",
