@@ -50,8 +50,9 @@ const Profile = () => {
 };
 
 // 언제 접속해도 데이터가 바뀔일이 없으면 getStaticProps 사용!
-export const getStaticProps = wrapper.getStaticProps(async (context) => {
-    console.log('getStaticProps');
+//export const getStaticProps = wrapper.getStaticProps(async (context) => {
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+
     context.store.dispatch({
         type: LOAD_USER_REQUEST,
         data: 1,
