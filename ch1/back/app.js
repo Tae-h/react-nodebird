@@ -95,6 +95,6 @@ app.use((err, req, res, next) => {
 
 })
 
-app.listen(3060, () => {
+app.listen(80, () => {
     console.log('express server running on port 3060!!!');
 })
