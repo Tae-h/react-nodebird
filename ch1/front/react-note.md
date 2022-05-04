@@ -13,3 +13,14 @@ Express 란!
 둘다 서버사이드 렌더링으로 페이지가 렌더링 하기 전에 데이터를 먼저 fetch 한다.
 - getStaticProps : 빌드시 고정되는 값으로, 빌드이후에는 변경이 불가합니다.
 - getServerSideProps : 빌드와 상관없이, 매 요청마다 데이터를 서버로부터 가져옵니다.
+
+### pm2 끄는법 --> npx pm2 kill
+### npx pm2 monit <-- log monit
+
+### 명령어 모음
+- pm2 종료 --> npx pm2 kill
+- pm2 모니터링 --> npx pm2 monit
+- log --> npx pm2 logs
+- 에러로그 --> npx pm2 logs --error
+- pm2 리스트 --> npm pm2 list
+- pm2 로 실행한 서버들 재시작 --> npx pm2 reload all

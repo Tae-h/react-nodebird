@@ -24,6 +24,8 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require("passport");
 const morgan = require('morgan');
+const hpp = require('hpp');
+const helmet = require('helmet');
 
 const postRouter = require('./routes/post');
 const postsRouter = require('./routes/posts');
@@ -57,10 +59,19 @@ app.head --> 안씀 헤더만 가져오기
 /**
  *  use 안에 들어가는 내용은 전부 미들웨어!!!
  */
-app.use(morgan('dev'));
+
+/* 배포 / 개발 구분 */
+if ( process.env.NODE_ENV !== 'production') {
+    app.use(morgan('combined'));
+    app.use(hpp());
+    app.use(helmet());
+} else {
+    app.use(morgan('dev'));
+}
+
 app.use(cors({
-    //origin: 'http://localhost:3000',
-    origin: true,
+    origin: ['http://localhost:3000', 'sns-study.com'],
+    //origin: true,
     credentials: true, // true: 쿠키까지 같이 전달
 })); // 모든 요청에 res.setHeader('Access-Control-Allow-Origin', '*'); 를 넣어줌
 app.use('/', express.static(path.join(__dirname, 'uploads'))); // os 별 경로 구분자 때문에 문자열 합치는거 안씀
