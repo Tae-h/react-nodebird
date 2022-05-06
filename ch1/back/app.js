@@ -82,6 +82,13 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
+        httpOnly: true,
+        secure: false,
+        domain: process.env.NODE_ENV === 'production' && '.3.36.106.184'
+    }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
