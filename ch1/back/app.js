@@ -70,7 +70,7 @@ if ( process.env.NODE_ENV !== 'production') {
 }
 
 app.use(cors({
-    origin: ['http://localhost:3000', 'sns-study.com', frontUrl],
+    origin: ['http://localhost:3000', 'sns-study.com', 'http://3.36.106.184'],
     //origin: true,
     credentials: true, // true: 쿠키까지 같이 전달
 })); // 모든 요청에 res.setHeader('Access-Control-Allow-Origin', '*'); 를 넣어줌
