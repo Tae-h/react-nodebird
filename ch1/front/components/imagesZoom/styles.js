@@ -14,7 +14,7 @@ export const Header = styled.header`
   height: 44px;
   background: white;
   position: relative;
-  padding: 0;
+  padding: 0;Ï
   text-align: center;
   
   & h1 {

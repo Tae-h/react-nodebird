@@ -24,3 +24,6 @@ Express 란!
 - 에러로그 --> npx pm2 logs --error
 - pm2 리스트 --> npm pm2 list
 - pm2 로 실행한 서버들 재시작 --> npx pm2 reload all
+
+#### git permission denied 일 경우
+- git reset --hard 후 다시 git pull

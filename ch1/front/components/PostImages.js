@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import {useCallback, useState} from "react";
 import {PlusOutlined} from "@ant-design/icons";
 import ImagesZoom from "./imagesZoom";
+import { backUrl } from "../config/config";
 
 const PostImages = ({ images }) => {
 
@@ -21,7 +22,7 @@ const PostImages = ({ images }) => {
         return (
             <>
                 <div>
-                    <img role="presentation" src={`http://localhost:3060/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
+                    <img role="presentation" src={`${backUrl}/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
                     {showImagesZoom && <ImagesZoom images={images} onClose={onCloseZoom}/>}
                 </div>
             </>
@@ -32,8 +33,8 @@ const PostImages = ({ images }) => {
         return (
             <>
                 <div>
-                    <img role="presentation" width={"50%"} src={`http://localhost:3060/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
-                    <img role="presentation" width={"50%"} src={`http://localhost:3060/${images[1].src}`} alt={images[1].alt} onClick={onZoom}/>
+                    <img role="presentation" width={"50%"} src={`${baseUrl}/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
+                    <img role="presentation" width={"50%"} src={`${baseUrl}/${images[1].src}`} alt={images[1].alt} onClick={onZoom}/>
                     {showImagesZoom && <ImagesZoom images={images} onClose={onCloseZoom}/>}
                 </div>
             </>
@@ -43,7 +44,7 @@ const PostImages = ({ images }) => {
     return (
         <>
             <div>
-                <img role="presentation" width={"50%"} src={`http://localhost:3060/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
+                <img role="presentation" width={"50%"} src={`${baseUrl}/${images[0].src}`} alt={images[0].alt} onClick={onZoom}/>
                 <div
                     role={"presentation"}
                     style={{display: 'inline-block', width: '50%', textAlign: 'center', verticalAlign: 'middle'}}

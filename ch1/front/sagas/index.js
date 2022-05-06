@@ -2,9 +2,11 @@ import {all, fork, call, put, take} from 'redux-saga/effects';
 import axios from 'axios';
 import postSaga from "./post";
 import userSaga from "./user";
+import { backUrl } from "../config/config";
 
 /* baseUrl setting */
-axios.defaults.baseURL = 'http://localhost:3060';
+//axios.defaults.baseURL = 'http://localhost:3060';
+axios.defaults.baseURL = backUrl;
 axios.defaults.withCredentials = true;
 
 export default function* rootSaga() { // gen 함수 rootSaga.next() 를 해야 실행

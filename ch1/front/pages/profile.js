@@ -18,8 +18,8 @@ const Profile = () => {
     const dispatch = useDispatch();
     const [followingsLimit, setFollowingsLimit] = useState(3);
     const [followersLimit, setFollowersLimit] = useState(3);
-    const { data: followingsData, error: followingError } = useSWR(`http://localhost:3060/user/followings?limit=${followingsLimit}`, fetcher);
-    const { data: followersData, error: followerError } = useSWR(`http://localhost:3060/user/followers?limit=${followersLimit}`, fetcher);
+    const { data: followingsData, error: followingError } = useSWR(`${baseUrl}/user/followings?limit=${followingsLimit}`, fetcher);
+    const { data: followersData, error: followerError } = useSWR(`${baseUrl}/user/followers?limit=${followersLimit}`, fetcher);
 
     const { me } = useSelector((state) => state.user);
 

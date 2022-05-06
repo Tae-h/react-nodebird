@@ -2,6 +2,7 @@ import {memo, useState} from "react";
 import PropTypes from "prop-types";
 import Slick from 'react-slick';
 import {CloseBtn, Global, Header, ImageWrapper, Indicator, Overlay, SlickWrapper} from "./styles";
+import {backUrl} from "../../config/config";
 
 /* styles.js 따로 뺄수 있음! */
 
@@ -30,7 +31,7 @@ const ImagesZoom = memo(({ images, onClose }) => {
                         >
                             { images?.map((v) => (
                                 <ImageWrapper key={v.src}>
-                                    <img src={`http://localhost:3060/${v.src}`} alt={v.alt}/>
+                                    <img src={`${backUrl}/${v.src}`} alt={v.alt}/>
                                 </ImageWrapper>
                             ))}
 
