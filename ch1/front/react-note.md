@@ -27,3 +27,7 @@ Express 란!
 
 #### git permission denied 일 경우
 - git reset --hard 후 다시 git pull
+
+
+### front 서버 실행 명령어
+- npx pm2 start npm -- start
