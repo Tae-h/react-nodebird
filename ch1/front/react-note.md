@@ -31,3 +31,6 @@ Express 란!
 
 ### front 서버 실행 명령어
 - npx pm2 start npm -- start
+
+### 실행중인 포트 확인
+- netstat -tnlps
