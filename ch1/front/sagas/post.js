@@ -84,14 +84,16 @@ function loadHashtagPostsAPI(data, lastId) {
 
 function* addPost(action) {
     try {
-        const result = yield call(addPostAPI, action.data);
+        //const result = yield call(addPostAPI, action.data);
         yield put({
             type: ADD_POST_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
         yield put({
             type: ADD_POST_TO_ME,
-            data: result.data.id,
+            //data: result.data.id,
+            data: action.data
         });
     } catch (err) {
         console.error(err);
@@ -106,10 +108,11 @@ function* addPost(action) {
 function* addComment(action) {
     try {
 
-        const result = yield call(addCommentAPI, action.data);
+        //const result = yield call(addCommentAPI, action.data);
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: ADD_COMMENT_SUCCESS,
-            data: result.data // 성공 결과
+            //data: result.data // 성공 결과
+            data: action.data
         });
     } catch (err) { // err.response.data
         yield put({
@@ -122,12 +125,13 @@ function* addComment(action) {
 
 function* removePost(action) {
     try {
-        const result = yield call(removePostAPI, action.data);
+        //const result = yield call(removePostAPI, action.data);
         //const id = shortid.generate();
 
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: REMOVE_POST_SUCCESS,
-            data: result.data // 데이터
+            //data: result.data // 데이터
+            data: action.data
         });
 
         yield put({
@@ -144,11 +148,12 @@ function* removePost(action) {
 
 function* loadPosts(action) {
     try {
-        const result = yield call(loadPostsAPI, action.lastId);
+        //const result = yield call(loadPostsAPI, action.lastId);
 
         yield put({
             type: LOAD_POSTS_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -160,11 +165,12 @@ function* loadPosts(action) {
 
 function* loadPost(action) {
     try {
-        const result = yield call(loadPostAPI, action.data);
+        //const result = yield call(loadPostAPI, action.data);
 
         yield put({
             type: LOAD_POST_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -176,11 +182,12 @@ function* loadPost(action) {
 
 function* likePost(action) {
     try {
-        const result = yield call(likePostAPI, action.data);
+        //const result = yield call(likePostAPI, action.data);
 
         yield put({
             type: LIKE_POST_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -192,11 +199,12 @@ function* likePost(action) {
 
 function* unLikePost(action) {
     try {
-        const result = yield call(unLikePostAPI, action.data);
+        //const result = yield call(unLikePostAPI, action.data);
 
         yield put({
             type: UNLIKE_POST_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -208,11 +216,12 @@ function* unLikePost(action) {
 
 function* uploadImages(action) {
     try {
-        const result = yield call(uploadImagesAPI, action.data);
+        //const result = yield call(uploadImagesAPI, action.data);
 
         yield put({
             type: UPLOAD_IMAGES_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -224,10 +233,11 @@ function* uploadImages(action) {
 
 function* retweet(action) {
     try {
-        const result = yield call(retweetAPI, action.data);
+        //const result = yield call(retweetAPI, action.data);
         yield put({
             type: RETWEET_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
     } catch (err) {
         console.error(err);
@@ -240,10 +250,11 @@ function* retweet(action) {
 
 function* loadUserPosts(action) {
     try {
-        const result = yield call(loadUserPostsAPI, action.data, action.lastId);
+        //const result = yield call(loadUserPostsAPI, action.data, action.lastId);
         yield put({
             type: LOAD_USER_POSTS_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
     } catch (err) {
         console.error(err);
@@ -256,10 +267,11 @@ function* loadUserPosts(action) {
 
 function* loadHashtagPosts(action) {
     try {
-        const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
+        //const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
         yield put({
             type: LOAD_HASHTAG_POSTS_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
     } catch (err) {
         console.error(err);

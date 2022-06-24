@@ -85,12 +85,13 @@ function removeFollowerAPI(data) {
 function* logIn(action) {
     try {
         console.log(action)
-        const result = yield call(loginAPI, action.data); // 나머지는 매개 변
+        //const result = yield call(loginAPI, action.data); // 나머지는 매개 변
         //yield delay(2000);
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: LOG_IN_SUCCESS,
             //data: result.data // 성공 결과
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
     } catch (err) { // err.response.data
         console.error(err)
@@ -105,10 +106,11 @@ function* logIn(action) {
 function* logOut() {
     try {
 
-        const result = yield call(logoutAPI);
+        //const result = yield call(logoutAPI);
         yield put({ // put 특정 action 을 dispatch 시켜줌
             type: LOG_OUT_SUCCESS,
-           // data: result.data // 성공 결과
+           // //data: result.data // 성공 결과
+            //data: action.data
         });
     } catch (err) { // err.response.data
         yield put({
@@ -121,12 +123,11 @@ function* logOut() {
 
 function* signUp(action) {
     try {
-        const result = yield call(signUpAPI, action.data);
+        //const result = yield call(signUpAPI, action.data);
         //yield delay(1000);
-        console.log('signUp:: ', result);
         yield put({
             type: SIGN_UP_SUCCESS,
-            //data:
+            data: action.data
         })
     } catch (err) {
         console.error(err);
@@ -140,11 +141,12 @@ function* signUp(action) {
 function* follow(action) {
     try {
 
-        const result = yield call(followAPI, action.data);
+        //const result = yield call(followAPI, action.data);
 
         yield put({
             type: FOLLOW_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -156,11 +158,12 @@ function* follow(action) {
 
 function* unFollow(action) {
     try {
-        const result = yield call(unFollowAPI, action.data);
+        //const result = yield call(unFollowAPI, action.data);
 
         yield put({
             type: UNFOLLOW_SUCCESS,
-            data: result.data
+            //data: result.data
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -172,11 +175,12 @@ function* unFollow(action) {
 
 function* loadMyInfo() {
     try {
-        const result = yield call(loadMyInfoAPI);
+        //const result = yield call(loadMyInfoAPI);
 
         yield put({
             type: LOAD_MY_INFO_SUCCESS,
-            data: result.data
+            //data: result.data
+            //data: action.data
         })
     } catch (err) {
         yield put({
@@ -188,10 +192,11 @@ function* loadMyInfo() {
 
 function* loadUser(action) {
     try {
-        const result = yield call(loadUserAPI, action.data);
+        //const result = yield call(loadUserAPI, action.data);
         yield put({
             type: LOAD_USER_SUCCESS,
-            data: result.data,
+            //data: result.data,
+            data: action.data
         });
     } catch (err) {
         console.error(err);
@@ -204,11 +209,12 @@ function* loadUser(action) {
 
 function* changeNickname(action) {
     try {
-        const result = yield call(changeNicknameAPI, action.data);
+        //const result = yield call(changeNicknameAPI, action.data);
 
         yield put({
             type: CHANGE_NICKNAME_SUCCESS,
-            data: result.data
+            //data: result.data
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -220,11 +226,12 @@ function* changeNickname(action) {
 
 function* loadFollowers(action) {
     try {
-        const result = yield call(loadFollowersAPI, action.data);
+        //const result = yield call(loadFollowersAPI, action.data);
 
         yield put({
             type: LOAD_FOLLOWERS_SUCCESS,
-            data: result.data
+            //data: result.data
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -236,11 +243,12 @@ function* loadFollowers(action) {
 
 function* loadFollowings(action) {
     try {
-        const result = yield call(loadFollowingsAPI, action.data);
+        //const result = yield call(loadFollowingsAPI, action.data);
 
         yield put({
             type: LOAD_FOLLOWINGS_SUCCESS,
-            data: result.data
+            //data: result.data
+            data: action.data
         })
     } catch (err) {
         yield put({
@@ -252,11 +260,12 @@ function* loadFollowings(action) {
 
 function* removeFollower(action) {
     try {
-        const result = yield call(removeFollowerAPI, action.data);
+        //const result = yield call(removeFollowerAPI, action.data);
 
         yield put({
             type: REMOVE_FOLLOWER_SUCCESS,
-            data: result.data
+            //data: result.data
+            data: action.data
         })
     } catch (err) {
         yield put({

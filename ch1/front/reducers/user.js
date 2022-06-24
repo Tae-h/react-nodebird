@@ -127,12 +127,7 @@ export const logoutRequestAction  = () => {
     }
 }
 
-export const changeNicknameRequestAction = (data) => {
-    return {
-        type: CHANGE_NICKNAME_REQUEST,
-        data,
-    }
-}
+
 
 const dummyUser = (data) => ({
     ...data,
